@@ -1,0 +1,10 @@
+# intellij
+**/.idea/
+**/out/
+**/*.iml
+
+# other/ui
+**/*.psd
+
+# other/logic
+**/*.xlsx
