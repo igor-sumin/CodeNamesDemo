@@ -1,0 +1,28 @@
+version: "3"
+
+services:
+  db:
+    image: postgres:11
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=postgre
+      - POSTGRES_PASSWORD=postgre
+      - POSTGRES_DB=codenames
+      - PG_DATA=/var/lib/postgresql/data
+    volumes:
+      - postgresql:/var/lib/postgresql
+      - postgresql_data:/var/lib/postgresql/data
+    restart: always
+    networks: 
+      - codenames-net
+      
+volumes:
+  postgresql:
+  postgresql_data:
+    driver: local
+
+networks:
+  codenames-net:
+    driver:
+       bridge
