@@ -16,9 +16,17 @@ services:
     restart: always
     networks:
       - codenames-net
-  app:
-    image: swatigor17/codenames-demo
 
+  app:
+    image: swatigor17/codenames-demo:version-1
+    container_name: app
+    ports:
+      - 8080:8080
+    environment:
+      POSTGRES_HOST: db
+    restart: always
+    links:
+      - db
 
 volumes:
   postgresql:

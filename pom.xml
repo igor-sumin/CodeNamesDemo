@@ -5,14 +5,15 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.netcracker</groupId>
-    <artifactId>CodeNamesDemo</artifactId>
+    <artifactId>codenames-demo</artifactId>
     <version>version-1</version>
 
-     <properties>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-        <java.version>1.8</java.version>
-     </properties>
+    <!-- Spring-boot dependency -->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.4.0</version>
+    </parent>
 
     <dependencies>
         <dependency>
@@ -26,37 +27,18 @@
         </dependency>
     </dependencies>
 
-    <!-- Spring-boot dependency -->
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-dependencies</artifactId>
-                <version>2.4.0</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
+    <properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <java.version>1.8</java.version>
+    </properties>
 
     <build>
-        <finalName>codenames-demo</finalName>
+        <finalName>${project.artifactId}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-
-            <!-- Apache Maven JAR plugin for compiled project -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>3.2.0</version>
-                <configuration>
-                    <archive>
-                        <manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
-                    </archive>
-                </configuration>
             </plugin>
         </plugins>
     </build>
