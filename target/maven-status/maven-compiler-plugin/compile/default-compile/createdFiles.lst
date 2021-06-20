@@ -1,1 +1,4 @@
+com\netcracker\dto\LoginDTO.class
 com\netcracker\CodeNamesDemoApp.class
+com\netcracker\controllers\AuthController.class
+com\netcracker\services\AuthService.class
