@@ -1,31 +1,43 @@
 package com.netcracker.controllers;
 
-import com.netcracker.dto.LoginDTO;
+import com.netcracker.dto.LoginRequestDTO;
+import com.netcracker.entities.User;
+import com.netcracker.repositories.UsersDAO;
 import com.netcracker.services.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 public class AuthController {
     @Autowired
     private AuthService authService;
+    @Autowired
+    private UsersDAO users;
 
     @GetMapping("/login")
-    public ResponseEntity<String> loginUser(@RequestBody LoginDTO loginDTO) {
+    public ResponseEntity<String> loginUser(@RequestBody LoginRequestDTO loginDTO) {
         String token = authService.login(loginDTO);
-        // if
+
+        // TODO: realize ResponseExceptionHandler
+
+        if (loginDTO.isEmpty()) {
+            return new ResponseEntity<>(
+                    "error: login or password is empty",
+                    HttpStatus.BAD_REQUEST
+            );
+        }
+
         return ResponseEntity.ok(token);
     }
 
-    /*@ControllerAdvice
-    public class ResponseExceptionHandler {
-        @ExceptionHandler(ResponseStatusException.class)
-        public final ResponseEntity<CommonResponse<Void>> handleAllExceptions(ResponseStatusException ex, WebRequest request) {
-            log.error("Error was occured: ", ex);
 
-            return new ResponseEntity<String>
-    }*/
+
+    @GetMapping("/list/{room}/users")
+    public List<User> getAllUsers(@PathVariable int room) {
+        return users.findAll();
+    }
 }

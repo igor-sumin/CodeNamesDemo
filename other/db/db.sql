@@ -11,10 +11,9 @@ create table users (
 	captain boolean not null,
 	teams integer not null,
 	created_on timestamp not null,
-	room integer not null,
-	
+	room integer not null
 	foreign key (room)
-		references room (room_id)
+		references room (room_id),
 	foreign key (teams)
 		references team (team_id)
 );
@@ -23,7 +22,7 @@ create table team (
 	team_id integer not null,
 	teamname varchar(50) not null,
 	qnt_points integer not null,
-	created_on timestamp not null,
+	created_on timestamp not null
 );
 
 
