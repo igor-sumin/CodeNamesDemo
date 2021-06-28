@@ -19,7 +19,7 @@ create table users (
 );
 
 create table team (
-	team_id integer not null,
+	team_id serial primary key,
 	teamname varchar(50) not null,
 	qnt_points integer not null,
 	created_on timestamp not null

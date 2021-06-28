@@ -1,6 +1,7 @@
 package com.netcracker.controllers;
 
 import com.netcracker.dto.LoginRequestDTO;
+import com.netcracker.dto.LoginResponseDTO;
 import com.netcracker.entities.User;
 import com.netcracker.repositories.UsersDAO;
 import com.netcracker.services.AuthService;
@@ -23,7 +24,7 @@ public class AuthController {
         String token = authService.login(loginDTO);
 
         // TODO: realize ResponseExceptionHandler
-
+        // TODO: вынеси куда-нибудь
         if (loginDTO.isEmpty()) {
             return new ResponseEntity<>(
                     "error: login or password is empty",
@@ -32,12 +33,5 @@ public class AuthController {
         }
 
         return ResponseEntity.ok(token);
-    }
-
-
-
-    @GetMapping("/list/{room}/users")
-    public List<User> getAllUsers(@PathVariable int room) {
-        return users.findAll();
     }
 }
