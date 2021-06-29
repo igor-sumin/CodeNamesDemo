@@ -43,3 +43,5 @@ insert into room(uniq_ref, amount)
 insert into team(team_name, qnt_points, created_on)
     values('Red', 0, '2021-06-29 10:17:48.223');
 
+insert into users(user_name, user_password, captain, team, created_on, room)
+    values('Igor', 123, true, 1, '2021-06-29 10:17:48.223', 1);

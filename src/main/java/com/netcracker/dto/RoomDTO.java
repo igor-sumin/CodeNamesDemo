@@ -5,10 +5,15 @@ import com.netcracker.entities.Team;
 import java.util.List;
 
 public class RoomDTO {
-    private int id;
+    private Long id;
     private List<Team> teams;
 
-    public int getId() {
+    public RoomDTO(Long id, List<Team> teams) {
+        this.id = id;
+        this.teams = teams;
+    }
+
+    public Long getId() {
         return id;
     }
 

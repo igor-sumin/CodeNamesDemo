@@ -1,30 +1,30 @@
-package com.netcracker.controllers;
+package com.netcracker.controllers.entry;
 
 import com.netcracker.dto.LoginRequestDTO;
-import com.netcracker.dto.LoginResponseDTO;
-import com.netcracker.entities.User;
-import com.netcracker.repositories.UsersDAO;
-import com.netcracker.services.AuthService;
+import com.netcracker.services.entry.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+// TODO: realize ResponseExceptionHandler
 
 @RestController
-public class AuthController {
+@RequestMapping("login")
+public class LoginController {
+    private final LoginService loginService;
+
     @Autowired
-    private AuthService authService;
+    public LoginController(LoginService loginService) {
+        this.loginService = loginService;
+    }
 
-    @GetMapping("/login")
+    @PostMapping("")
     public ResponseEntity<String> loginUser(@RequestBody LoginRequestDTO loginDTO) {
-        String token = authService.login(loginDTO);
+        String token = loginService.login(loginDTO).getToken();
 
-        // TODO: realize ResponseExceptionHandler
         // TODO: вынеси куда-нибудь
-        if (loginDTO.isEmpty()) {
+        if (loginService.isEmpty(loginDTO)) {
             return new ResponseEntity<>(
                     "error: login or password is empty",
                     HttpStatus.BAD_REQUEST

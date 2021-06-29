@@ -11,6 +11,10 @@ public class UserDTO {
         this.name = name;
     }
 
+    public long getUserId() {
+        return userId;
+    }
+
     public boolean getCaptain() {
         return captain;
     }

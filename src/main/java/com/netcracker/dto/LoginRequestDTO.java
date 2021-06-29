@@ -18,8 +18,4 @@ public class LoginRequestDTO {
     public String getPassword() {
         return password;
     }
-
-    public boolean isEmpty() {
-        return login.isEmpty() || password.isEmpty();
-    }
 }
