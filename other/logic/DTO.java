@@ -18,3 +18,9 @@ loginRequestDTO { login, password }
 loginResponseDTO { token }
 RoomDTO { usersDTO, teamsDTO }
 
+@Value("${spring.datasource.url}")
+    private static String URL;
+    @Value("${spring.datasource.username}")
+    private static String USERNAME;
+    @Value("${spring.datasource.password}")
+    private static String PASSWORD;

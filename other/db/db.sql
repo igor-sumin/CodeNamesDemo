@@ -4,31 +4,31 @@ create table room (
 	amount integer not null
 );
 
+create table team (
+      team_id serial primary key,
+      team_name varchar(50) not null,
+      qnt_points integer not null,
+      created_on timestamp not null
+);
+
+
 create table users (
 	users_id serial primary key,
-	username varchar(50) not null,
-	userpassword varchar(50) not null,
+	user_name varchar(50) not null,
+	user_password varchar(50) not null,
 	captain boolean not null,
-	teams integer not null,
+	team integer not null,
 	created_on timestamp not null,
-	room integer not null
+	room integer not null,
 	foreign key (room)
 		references room (room_id),
-	foreign key (teams)
+	foreign key (team)
 		references team (team_id)
 );
 
-create table team (
-	team_id serial primary key,
-	teamname varchar(50) not null,
-	qnt_points integer not null,
-	created_on timestamp not null
-);
-
-
 create table messages (
 	messages_id serial primary key,
-	usertext varchar,
+	user_text varchar,
 	user_id integer not null,
 	wired integer not null,
 	created_on timestamp not null,
@@ -37,7 +37,9 @@ create table messages (
 		references users (users_id)
 );
 
-select * from messages;
-select * from room;
-select * from users;
-select * from team;
+insert into room(uniq_ref, amount)
+    values('localhost:8080/sass1', 10);
+
+insert into team(team_name, qnt_points, created_on)
+    values('Red', 0, '2021-06-29 10:17:48.223');
+

@@ -1,12 +1,12 @@
 package com.netcracker.dto;
 
 public class UserDTO {
-    private long USER_ID;
+    private long userId;
     private boolean captain;
     private String name;
 
     public UserDTO(long userid, boolean captain, String name) {
-        this.USER_ID = userid;
+        this.userId = userid;
         this.captain = captain;
         this.name = name;
     }

@@ -1,6 +1,7 @@
 package com.netcracker.entities;
 
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import java.util.List;
 
@@ -8,9 +9,8 @@ import java.util.List;
 public class Room {
     @Id
     private long id;
-
     private String uniqRef;
 
-    @OneToMany(mappedBy = "room")
-    private List<User> users;
+    /*@OneToMany(mappedBy = "room")
+    private List<User> users;*/
 }

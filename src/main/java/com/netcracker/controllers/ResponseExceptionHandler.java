@@ -10,6 +10,4 @@ public class ResponseExceptionHandler {
     @ExceptionHandler(ResponseStatusException.class)
     public final void handleAllExceptions(ResponseStatusException ex, WebRequest request) {
     }
-
-
 }
