@@ -1,10 +1,8 @@
 package com.netcracker.dto;
 
 public class LoginRequestDTO {
-    private String login;
-    private String password;
-
-    public LoginRequestDTO() {}
+    private final String login;
+    private final String password;
 
     public LoginRequestDTO(String login, String password) {
         this.login = login;

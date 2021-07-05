@@ -8,12 +8,11 @@ public class RegisterRequestDTO {
     private final String password;
     private final Timestamp createdOn;
 
-
-    public RegisterRequestDTO(String login, String name, String password) {
+    public RegisterRequestDTO(String login, String name, String password, Timestamp createdOn) {
         this.login = login;
         this.name = name;
         this.password = password;
-        this.createdOn = new Timestamp(System.currentTimeMillis());
+        this.createdOn = createdOn;
     }
 
     public String getLogin() {

@@ -1,0 +1,20 @@
+server:
+  address: localhost
+  port: 8080
+
+spring:
+  datasource:
+    name: ${POSTGRES_DB:codenames}
+    username: ${POSTGRES_USER:postgres}
+    password: ${POSTGRES_PASSWORD:3752Amour}
+    url:
+      - jdbc:postgresql://${server.address}/${spring.datasource.name}
+
+  jpa:
+    show-sql: true
+    generate-ddl: true
+
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true

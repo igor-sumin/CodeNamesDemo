@@ -1,6 +1,7 @@
 package com.netcracker.entities;
 
 import javax.persistence.*;
+import java.util.List;
 
 // TODO: wired with users
 
@@ -11,10 +12,15 @@ public class Room {
     @GeneratedValue(strategy=GenerationType.AUTO)
     @Column(name="room_id")
     private Long id;
+
     @Column(name="uniq_ref")
     private String uniqId;
+
     @Column(name="amount")
     private int amount;
+
+    /*@OneToMany(mappedBy = "roomUser")
+    private List<User> users;*/
 
     protected Room() {
     }
@@ -36,7 +42,4 @@ public class Room {
     public int getAmount() {
         return amount;
     }
-
-    /*@OneToMany(mappedBy = "room")
-    private List<User> users;*/
 }

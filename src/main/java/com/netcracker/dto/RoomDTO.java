@@ -1,14 +1,12 @@
 package com.netcracker.dto;
 
-import com.netcracker.entities.Team;
-
 import java.util.List;
 
 public class RoomDTO {
     private Long id;
-    private List<Team> teams;
+    private List<TeamDTO> teams;
 
-    public RoomDTO(Long id, List<Team> teams) {
+    public RoomDTO(Long id, List<TeamDTO> teams) {
         this.id = id;
         this.teams = teams;
     }
@@ -17,7 +15,7 @@ public class RoomDTO {
         return id;
     }
 
-    public List<Team> getTeams() {
+    public List<TeamDTO> getTeams() {
         return teams;
     }
 }

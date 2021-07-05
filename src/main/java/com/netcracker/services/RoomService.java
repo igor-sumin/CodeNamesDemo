@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @Component
 public class RoomService {
@@ -18,7 +20,7 @@ public class RoomService {
     }
 
     public RoomDTO getRoom(String uniqId) {
-        Room room = roomRepository.findByUniqId(uniqId);
+        List<Room> rooms = roomRepository.findByUniqId(uniqId);
 
         // return new RoomDTO(room.getId(), room.getTeams());
         return null;

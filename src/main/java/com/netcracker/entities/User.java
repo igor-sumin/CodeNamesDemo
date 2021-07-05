@@ -3,6 +3,8 @@ package com.netcracker.entities;
 import javax.persistence.*;
 import java.sql.Timestamp;
 
+// TODO: связывание между entities
+
 @Entity
 @Table(name="users")
 public class User {
@@ -10,36 +12,30 @@ public class User {
     @GeneratedValue(strategy=GenerationType.AUTO)
     @Column(name="users_id")
     private Long id;
+
     @Column(name="user_name")
     private String userName;
+
     @Column(name="user_password")
     private String userPassword;
+
     @Column(name="captain")
     private boolean captain;
+
     @Column(name="team")
     private int team;
+
     @Column(name="created_on")
     private Timestamp createdOn;
+
     @Column(name="room")
     private int room;
 
-    // TODO: связывание между entities
-    /* @ManyToOne
-    @JoinColumn(name="room_id", referencedColumnName="room", nullable=false)
-    private Room room;*/
-    // wired private Room
+    /*@ManyToOne
+    @JoinColumn(name="room_id", referencedColumnName="roomUser", nullable=false)
+    private Room roomUser;*/
 
     protected User() {}
-
-    public User(Long id, String userName, String userPassword, boolean captain, int team, Timestamp createdOn, int room) {
-        this.id = id;
-        this.userName = userName;
-        this.userPassword = userPassword;
-        this.captain = captain;
-        this.team = team;
-        this.createdOn = createdOn;
-        this.room = room;
-    }
 
     public User(String userName, String userPassword, boolean captain, int team, Timestamp createdOn, int room) {
         this.userName = userName;

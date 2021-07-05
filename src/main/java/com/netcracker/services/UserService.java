@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Component
@@ -20,11 +21,18 @@ public class UserService {
     }
 
     public UserDTO getUser(long id) {
-        User user = userRepository
+        return userRepository
                     .findById(id)
+                    .map(u -> new UserDTO(u.getId(), u.getCaptain(), u.getUserName()))
                     .orElseThrow(RuntimeException::new);
+    }
 
-        return new UserDTO(user.getId(), user.getCaptain(), user.getUserName());
+    public List<UserDTO> getAllUsersRoom(int roomId) {
+        return userRepository
+                    .findAllByRoom(roomId)
+                    .stream()
+                    .map(u -> new UserDTO(u.getId(), u.getCaptain(), u.getUserName()))
+                    .collect(Collectors.toList());
     }
 
     public List<User> findAll() {

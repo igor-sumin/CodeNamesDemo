@@ -1,7 +1,0 @@
-{
-  "name": "CodeNamesDemo",
-  "version": "1.0.0",
-  "dependencies": {
-    "vue": "^2.6.14"
-  }
-}

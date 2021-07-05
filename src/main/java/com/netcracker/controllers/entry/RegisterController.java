@@ -21,8 +21,8 @@ public class RegisterController {
     }
 
     @PostMapping("")
-    public ResponseEntity<String> loginUser(@RequestBody RegisterRequestDTO registerDTO) {
-         String token = registerService.register(registerDTO).getToken();
+    public ResponseEntity<String> registerUser(@RequestBody RegisterRequestDTO registerDTO) {
+        String token = registerService.register(registerDTO).getToken();
 
         if (registerService.isEmpty(registerDTO)) {
             return new ResponseEntity<>(

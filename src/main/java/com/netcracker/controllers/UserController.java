@@ -4,10 +4,7 @@ import com.netcracker.dto.UserDTO;
 import com.netcracker.entities.User;
 import com.netcracker.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -30,5 +27,10 @@ public class UserController {
     @GetMapping("/list")
     public List<User> getAllUsers() {
         return userService.findAll();
+    }
+
+    @GetMapping("/list/room")
+    public List<UserDTO> getAllUsersRoom(@RequestParam int id) {
+        return userService.getAllUsersRoom(id);
     }
 }
