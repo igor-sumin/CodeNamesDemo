@@ -13,6 +13,10 @@ import java.util.UUID;
 public class LoginService {
     // возвращаем новый токен
     public EntryResponseDTO login(LoginRequestDTO loginDTO) {
+        // проверка
+
+        // сохранить токен
+
         return new EntryResponseDTO(
             UUID.nameUUIDFromBytes(
                 (

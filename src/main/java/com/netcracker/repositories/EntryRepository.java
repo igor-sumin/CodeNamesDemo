@@ -5,4 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface EntryRepository extends JpaRepository<Entry, Integer> {
     Entry findByUserId(int userId);
+    Entry findByToken(String token);
 }

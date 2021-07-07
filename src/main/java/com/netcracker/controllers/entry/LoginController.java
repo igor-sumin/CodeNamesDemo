@@ -31,6 +31,8 @@ public class LoginController {
             );
         }
 
+        System.out.println("data = " + loginDTO.getLogin() + ", " + loginDTO.getPassword());
+
         return ResponseEntity.ok(token);
     }
 }
