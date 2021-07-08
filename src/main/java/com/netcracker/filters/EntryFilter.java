@@ -1,6 +1,6 @@
 package com.netcracker.filters;
 
-import com.netcracker.services.AuthService;
+import com.netcracker.services.EntryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -11,24 +11,17 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-// TODO: learn CORS
 
 @Component
 @Order(2)
 public class EntryFilter implements Filter {
-    private final AuthService authService;
-    private static final Logger logger = Logger.getLogger(EntryFilter.class.getName());
+    private final EntryService entryService;
+    private static final List<String> url = Arrays.asList("/login", "/register");
 
     @Autowired
-    public EntryFilter(AuthService authService) {
-        this.authService = authService;
+    public EntryFilter(EntryService authService) {
+        this.entryService = authService;
     }
-
-    // TODO:
-    private static final List<String> url = Arrays.asList("/login", "/register");
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -42,18 +35,18 @@ public class EntryFilter implements Filter {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
 
-
         if (url.contains(httpRequest.getRequestURI())) {
             filterChain.doFilter(request, response);
             return;
         }
 
         String token = httpRequest.getHeader("token");
+        System.out.println("token = " + token);
 
         // TODO: потом убери
         // filterChain.doFilter(request, response);
 
-        if (authService.authorize(token)) {
+        if (entryService.authorize(token)) {
             filterChain.doFilter(request, response);
         }
 

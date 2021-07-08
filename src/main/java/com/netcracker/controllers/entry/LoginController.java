@@ -1,5 +1,6 @@
 package com.netcracker.controllers.entry;
 
+import com.netcracker.dto.EntryResponseDTO;
 import com.netcracker.dto.LoginRequestDTO;
 import com.netcracker.services.entry.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,21 +21,9 @@ public class LoginController {
     }
 
     @PostMapping("")
-    public ResponseEntity<String> loginUser(@RequestBody LoginRequestDTO loginDTO) {
-
-
-        // TODO: вынеси куда-нибудь
-        if (loginService.isEmpty(loginDTO)) {
-            return new ResponseEntity<>(
-                    "error: login or password is empty",
-                    HttpStatus.BAD_REQUEST
-            );
-        }
-
+    public ResponseEntity<EntryResponseDTO> loginUser(@RequestBody LoginRequestDTO loginDTO) {
+        // System.out.println("loginDTO = " + loginDTO.getLogin() + ", " + loginDTO.getPassword());
         String token = loginService.login(loginDTO).getToken();
-
-        System.out.println("data = " + loginDTO.getLogin() + ", " + loginDTO.getPassword());
-
-        return ResponseEntity.ok(token);
+        return ResponseEntity.ok(new EntryResponseDTO(token));
     }
 }

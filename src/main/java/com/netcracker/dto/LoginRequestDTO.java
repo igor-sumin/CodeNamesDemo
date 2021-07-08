@@ -9,7 +9,6 @@ public class LoginRequestDTO {
         this.password = password;
     }
 
-
     public String getLogin() {
         return login;
     }

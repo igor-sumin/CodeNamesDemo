@@ -12,7 +12,6 @@ import java.io.IOException;
 @Order(1)
 public class CodeNamesCorsFilter implements Filter {
 
-
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
 

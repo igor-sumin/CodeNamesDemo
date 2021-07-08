@@ -1,3 +1,4 @@
+
 package com.netcracker.controllers;
 
 import com.netcracker.dto.UserDTO;
@@ -8,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-// TODO: фильтры (?)
 @RestController
 @RequestMapping("/user")
 public class UserController {

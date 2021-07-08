@@ -5,13 +5,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class AuthService {
+public class EntryService {
+    private final EntryRepository entryRepository;
+
     @Autowired
-    private EntryRepository entryRepository;
+    public EntryService(EntryRepository entryRepository) {
+        this.entryRepository = entryRepository;
+    }
 
     public boolean authorize(String token) {
         // ищем юзера по токену -> нашли -> пропускаем
-        // return entryRepository.findByToken(token) != null;
-        return true;
+         return entryRepository.findByToken(token) != null;
     }
 }

@@ -13,5 +13,4 @@ public class CodeNamesDemoApp {
     public static void main(String[] args) {
         SpringApplication.run(CodeNamesDemoApp.class, args);
     }
-
 }
