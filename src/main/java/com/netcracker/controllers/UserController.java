@@ -10,7 +10,7 @@ import java.util.List;
 
 // TODO: фильтры (?)
 @RestController
-@RequestMapping("user")
+@RequestMapping("/user")
 public class UserController {
     private final UserService userService;
 

@@ -12,16 +12,16 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("login")
 public class LoginController {
+
     private final LoginService loginService;
 
-    @Autowired
     public LoginController(LoginService loginService) {
         this.loginService = loginService;
     }
 
     @PostMapping("")
     public ResponseEntity<String> loginUser(@RequestBody LoginRequestDTO loginDTO) {
-        String token = loginService.login(loginDTO).getToken();
+
 
         // TODO: вынеси куда-нибудь
         if (loginService.isEmpty(loginDTO)) {
@@ -30,6 +30,8 @@ public class LoginController {
                     HttpStatus.BAD_REQUEST
             );
         }
+
+        String token = loginService.login(loginDTO).getToken();
 
         System.out.println("data = " + loginDTO.getLogin() + ", " + loginDTO.getPassword());
 

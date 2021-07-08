@@ -2,6 +2,7 @@ package com.netcracker.services.entry;
 
 import com.netcracker.dto.EntryResponseDTO;
 import com.netcracker.dto.LoginRequestDTO;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +28,7 @@ public class LoginService {
     }
 
     public boolean isEmpty(LoginRequestDTO loginDTO) {
-        return loginDTO.getLogin().isEmpty() || loginDTO.getPassword().isEmpty();
+        return StringUtils.isBlank(loginDTO.getLogin()) ||
+                StringUtils.isBlank(loginDTO.getPassword());
     }
 }

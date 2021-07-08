@@ -2,6 +2,7 @@ package com.netcracker.filters;
 
 import com.netcracker.services.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
@@ -9,12 +10,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 // TODO: learn CORS
 
 @Component
+@Order(2)
 public class EntryFilter implements Filter {
     private final AuthService authService;
     private static final Logger logger = Logger.getLogger(EntryFilter.class.getName());
@@ -25,7 +28,7 @@ public class EntryFilter implements Filter {
     }
 
     // TODO:
-    private final String[] url = new String[] {"/login", "/register"};
+    private static final List<String> url = Arrays.asList("/login", "/register");
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -40,8 +43,9 @@ public class EntryFilter implements Filter {
         HttpServletResponse httpResponse = (HttpServletResponse) response;
 
 
-        if (Arrays.stream(url).anyMatch(u -> u.equals(httpRequest.getRequestURI()))) {
+        if (url.contains(httpRequest.getRequestURI())) {
             filterChain.doFilter(request, response);
+            return;
         }
 
         String token = httpRequest.getHeader("token");
