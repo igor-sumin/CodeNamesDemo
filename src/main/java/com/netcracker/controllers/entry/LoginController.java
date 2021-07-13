@@ -1,10 +1,8 @@
 package com.netcracker.controllers.entry;
 
-import com.netcracker.dto.EntryResponseDTO;
-import com.netcracker.dto.LoginRequestDTO;
+import com.netcracker.dto.entry.EntryResponseDTO;
+import com.netcracker.dto.entry.LoginRequestDTO;
 import com.netcracker.services.entry.LoginService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,8 +20,7 @@ public class LoginController {
 
     @PostMapping("")
     public ResponseEntity<EntryResponseDTO> loginUser(@RequestBody LoginRequestDTO loginDTO) {
-        // System.out.println("loginDTO = " + loginDTO.getLogin() + ", " + loginDTO.getPassword());
-        String token = loginService.login(loginDTO).getToken();
+        String token = loginService.login(loginDTO);
         return ResponseEntity.ok(new EntryResponseDTO(token));
     }
 }

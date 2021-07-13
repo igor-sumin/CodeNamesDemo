@@ -19,7 +19,7 @@ public class RoomController {
     }
 
     @GetMapping("")
-    public RoomDTO getRoom(String uniqId) {
-        return roomService.getRoom(uniqId);
+    public RoomDTO getRoom(String uniqRef) {
+        return roomService.getRoom(uniqRef);
     }
 }

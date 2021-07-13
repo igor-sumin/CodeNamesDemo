@@ -14,7 +14,6 @@ public class EntryService {
     }
 
     public boolean authorize(String token) {
-        // ищем юзера по токену -> нашли -> пропускаем
          return entryRepository.findByToken(token) != null;
     }
 }

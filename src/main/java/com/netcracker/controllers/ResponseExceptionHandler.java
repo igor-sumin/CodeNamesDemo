@@ -1,9 +1,5 @@
 package com.netcracker.controllers;
 
-import com.netcracker.dto.LoginRequestDTO;
-import com.netcracker.services.entry.LoginService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
@@ -14,4 +10,11 @@ public class ResponseExceptionHandler {
     @ExceptionHandler(ResponseStatusException.class)
     public final void handleAllExceptions(ResponseStatusException ex, WebRequest request) {
     }
+
+//    if (registerService.isEmpty(registerDTO)) {
+//        return new ResponseEntity<>(
+//                "error: login or password is empty",
+//                HttpStatus.BAD_REQUEST
+//        );
+//    }
 }

@@ -2,8 +2,11 @@
 package com.netcracker.controllers;
 
 import com.netcracker.dto.UserDTO;
+import com.netcracker.entities.Entry;
 import com.netcracker.entities.User;
+import com.netcracker.repositories.EntryRepository;
 import com.netcracker.services.UserService;
+import jdk.internal.net.http.common.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,15 +16,22 @@ import java.util.List;
 @RequestMapping("/user")
 public class UserController {
     private final UserService userService;
+    private final EntryRepository entryRepository;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, EntryRepository entryRepository) {
         this.userService = userService;
+        this.entryRepository = entryRepository;
     }
 
+//    @GetMapping("")
+//    public UserDTO getUser(@RequestParam long id) {
+//        return userService.getUser(id);
+//    }
+
     @GetMapping("")
-    public UserDTO getUser(@RequestParam long id) {
-        return userService.getUser(id);
+    public Pair<UserDTO, Entry> getUser(@RequestParam long id) {
+        return Pair.pair(userService.getUser(id), entryRepository.findByUserId(id));
     }
 
     @GetMapping("/list")
