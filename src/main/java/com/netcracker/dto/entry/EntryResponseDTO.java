@@ -1,13 +1,10 @@
-package com.netcracker.dto;
+package com.netcracker.dto.entry;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
+@Data
+@AllArgsConstructor
 public class EntryResponseDTO {
-    private final String token;
-
-    public EntryResponseDTO(String token) {
-        this.token = token;
-    }
-
-    public String getToken() {
-        return token;
-    }
+    private String token;
 }

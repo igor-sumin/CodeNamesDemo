@@ -1,21 +1,13 @@
 package com.netcracker.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
 import java.util.List;
 
+@Data
+@AllArgsConstructor
 public class RoomDTO {
     private Long id;
     private List<TeamDTO> teams;
-
-    public RoomDTO(Long id, List<TeamDTO> teams) {
-        this.id = id;
-        this.teams = teams;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public List<TeamDTO> getTeams() {
-        return teams;
-    }
 }

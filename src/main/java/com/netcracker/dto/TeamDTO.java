@@ -1,22 +1,14 @@
 package com.netcracker.dto;
 
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
 import java.util.List;
 
+@Data
+@AllArgsConstructor
 public class TeamDTO {
     private String teamName;
     private List<UserDTO> users;
-
-    public TeamDTO(String teamName, List<UserDTO> users) {
-        this.teamName = teamName;
-        this.users = users;
-    }
-
-    public String getTeamName() {
-        return teamName;
-    }
-
-    public List<UserDTO> getUsers() {
-        return users;
-    }
 }
