@@ -1,6 +1,7 @@
 package com.netcracker.filters;
 
-import com.netcracker.services.EntryService;
+import com.netcracker.services.entry.EntryService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -12,6 +13,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
+@Slf4j
 @Component
 @Order(2)
 public class EntryFilter implements Filter {
@@ -41,11 +43,6 @@ public class EntryFilter implements Filter {
         }
 
         String token = httpRequest.getHeader("token");
-        System.out.println("token = " + token);
-
-        // TODO: потом убери
-        // filterChain.doFilter(request, response);
-
         if (entryService.authorize(token)) {
             filterChain.doFilter(request, response);
         }
