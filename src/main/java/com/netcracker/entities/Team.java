@@ -1,46 +1,29 @@
 package com.netcracker.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import java.sql.Timestamp;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
+import java.util.List;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
+@Table(name="team")
 public class Team {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
+    @Column(name="team_id")
     private Long id;
+
+    @Column(name="team_name")
     private String teamName;
+
+    @Column(name="qnt_points")
     private int qntPoints;
-    private Timestamp createdOn;
 
-    protected Team() {}
-
-    public Team(String teamName, int qntPoints, Timestamp createdOn) {
-        this.teamName = teamName;
-        this.qntPoints = qntPoints;
-        this.createdOn = createdOn;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getTeamName() {
-        return teamName;
-    }
-
-    public int getQntPoints() {
-        return qntPoints;
-    }
-
-    public Timestamp getCreatedOn() {
-        return createdOn;
-    }
-
-    @Override
-    public String toString() {
-        return "User[id=" + id + ", teamName=" + teamName + ", qntPoints=" + qntPoints + ", createdOn=" + createdOn + "]";
-    }
+    @OneToMany(mappedBy="teamUser")
+    private List<User> users;
 }

@@ -1,17 +1,28 @@
 package com.netcracker.entities;
 
+import com.netcracker.dto.entry.RegisterRequestDTO;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.util.List;
 
-// TODO: связывание между entities
+// TODO: updatable ??
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name="users")
 public class User {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     @Column(name="users_id")
-    private Long id;
+    private long userId;
+
+    @Column(name="user_login")
+    private String userLogin;
 
     @Column(name="user_name")
     private String userName;
@@ -19,58 +30,33 @@ public class User {
     @Column(name="user_password")
     private String userPassword;
 
-    @Column(name="captain")
+    @Column(name="user_email")
+    private String userEmail;
+
+    @Column(name="captain", insertable = false)
     private boolean captain;
 
-    @Column(name="team")
+    @Column(name="team", insertable = false, updatable = false)
     private int team;
 
-    @Column(name="created_on")
-    private Timestamp createdOn;
-
-    @Column(name="room")
+    @Column(name="room", insertable = false, updatable = false)
     private int room;
 
-    /*@ManyToOne
-    @JoinColumn(name="room_id", referencedColumnName="roomUser", nullable=false)
-    private Room roomUser;*/
+    @ManyToOne(fetch=FetchType.EAGER)
+    @JoinColumn(name="team")
+    private Team teamUser;
 
-    protected User() {}
+    @ManyToOne(fetch=FetchType.EAGER)
+    @JoinColumn(name="room")
+    private Room roomUser;
 
-    public User(String userName, String userPassword, boolean captain, int team, Timestamp createdOn, int room) {
-        this.userName = userName;
-        this.userPassword = userPassword;
-        this.captain = captain;
-        this.team = team;
-        this.createdOn = createdOn;
-        this.room = room;
-    }
+    @OneToMany(mappedBy="user")
+    private List<Messages> messages;
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public String getUserPassword() {
-        return userPassword;
-    }
-
-    public boolean getCaptain() {
-        return captain;
-    }
-
-    public int getTeam() {
-        return team;
-    }
-
-    public Timestamp getCreatedOn() {
-        return createdOn;
-    }
-
-    public int getRoom() {
-        return room;
+    public User(RegisterRequestDTO registerDTO) {
+        this.userLogin = registerDTO.getLogin();
+        this.userName = registerDTO.getUserName();
+        this.userPassword = registerDTO.getUserPassword();
+        this.userEmail = registerDTO.getEmail();
     }
 }

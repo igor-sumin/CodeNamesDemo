@@ -1,10 +1,15 @@
 package com.netcracker.entities;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import java.util.List;
 
-// TODO: wired with users
-
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name="room")
 public class Room {
@@ -14,32 +19,11 @@ public class Room {
     private Long id;
 
     @Column(name="uniq_ref")
-    private String uniqId;
+    private String uniqRef;
 
     @Column(name="amount")
     private int amount;
 
-    /*@OneToMany(mappedBy = "roomUser")
-    private List<User> users;*/
-
-    protected Room() {
-    }
-
-    public Room(long id, String uniqId, int amount) {
-        this.id = id;
-        this.uniqId = uniqId;
-        this.amount = amount;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public String getUniqId() {
-        return uniqId;
-    }
-
-    public int getAmount() {
-        return amount;
-    }
+    @OneToMany(mappedBy="roomUser")
+    private List<User> users;
 }
