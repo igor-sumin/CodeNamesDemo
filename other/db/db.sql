@@ -14,12 +14,14 @@ create table team (
 
 create table users (
 	users_id serial primary key,
+	user_login varchar(50) not null,
 	user_name varchar(50) not null,
 	user_password varchar(50) not null,
-	captain boolean not null,
-	team integer not null,
-	created_on timestamp not null,
-	room integer not null,
+    user_email varchar(50) not null,
+    captain boolean,
+	team integer,
+	room integer,
+
 	foreign key (room)
 		references room (room_id),
 	foreign key (team)
@@ -37,11 +39,17 @@ create table messages (
 		references users (users_id)
 );
 
+create table entry (
+    entry_id serial primary key,
+    user_id bigint not null,
+    user_token varchar not null
+);
+
 insert into room(uniq_ref, amount)
     values('localhost:8080/sass1', 10);
 
 insert into team(team_name, qnt_points, created_on)
     values('Red', 0, '2021-06-29 10:17:48.223');
 
-insert into users(user_name, user_password, captain, team, created_on, room)
-    values('Igor', 123, true, 1, '2021-06-29 10:17:48.223', 1);
+insert into users(user_name, user_password, created_on, user_email)
+    values('Igor', 123, '2021-06-29 10:17:48.223', 'igor@mail.ru');

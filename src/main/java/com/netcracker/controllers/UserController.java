@@ -24,11 +24,6 @@ public class UserController {
         this.entryRepository = entryRepository;
     }
 
-//    @GetMapping("")
-//    public UserDTO getUser(@RequestParam long id) {
-//        return userService.getUser(id);
-//    }
-
     @GetMapping("")
     public Pair<UserDTO, Entry> getUser(@RequestParam long id) {
         return Pair.pair(userService.getUser(id), entryRepository.findByUserId(id));
