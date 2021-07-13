@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findAllByRoom(int roomId);
+    User findByUserLoginAndUserPassword(String userLogin, String userPassword);
 }
