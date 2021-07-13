@@ -19,8 +19,8 @@ public class RoomService {
         this.roomRepository = roomRepository;
     }
 
-    public RoomDTO getRoom(String uniqId) {
-        List<Room> rooms = roomRepository.findByUniqId(uniqId);
+    public RoomDTO getRoom(String uniqRef) {
+        List<Room> rooms = roomRepository.findByUniqRef(uniqRef);
 
         // return new RoomDTO(room.getId(), room.getTeams());
         return null;

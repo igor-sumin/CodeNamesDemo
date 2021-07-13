@@ -1,32 +1,47 @@
 package com.netcracker.services.entry;
 
-import com.netcracker.dto.EntryResponseDTO;
-import com.netcracker.dto.LoginRequestDTO;
-import com.netcracker.dto.RegisterRequestDTO;
+import com.netcracker.dto.entry.EntryResponseDTO;
+import com.netcracker.dto.entry.RegisterRequestDTO;
+import com.netcracker.entities.Entry;
+import com.netcracker.entities.User;
+import com.netcracker.repositories.EntryRepository;
+import com.netcracker.repositories.UserRepository;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
+@Slf4j
 @Service
 @Component
 public class RegisterService {
-    // возвращаем новый токен
-    public EntryResponseDTO register(RegisterRequestDTO registerDTO) {
-        return new EntryResponseDTO(
-            UUID.nameUUIDFromBytes(
-                (
-                    registerDTO.getLogin() + registerDTO.getPassword() +
-                    registerDTO.getName() + registerDTO.getCreatedOn()
-                ).getBytes(StandardCharsets.UTF_8)
-            ).toString()
-        );
+    private final EntryRepository entryRepository;
+    private final UserRepository userRepository;
+
+    @Autowired
+    public RegisterService(EntryRepository entryRepository, UserRepository userRepository) {
+        this.entryRepository = entryRepository;
+        this.userRepository = userRepository;
     }
 
-    public boolean isEmpty(RegisterRequestDTO loginDTO) {
-        return loginDTO.getLogin().isEmpty() ||
-               loginDTO.getPassword().isEmpty() ||
-               loginDTO.getName().isEmpty();
+    public String register(RegisterRequestDTO registerDTO) {
+        User user = new User(registerDTO);
+
+        // генерируем токен
+        String userToken = new EntryResponseDTO(UUID.nameUUIDFromBytes(
+                registerDTO.toString().getBytes(StandardCharsets.UTF_8)
+            ).toString()
+        ).getToken();
+
+        // сохраняем пользователя
+        userRepository.save(user);
+
+        // сохраняем токен
+        entryRepository.save(new Entry(user.getUserId(), userToken));
+
+        return userToken;
     }
 }

@@ -1,4 +1,4 @@
-package com.netcracker.services;
+package com.netcracker.services.entry;
 
 import com.netcracker.repositories.EntryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +14,6 @@ public class EntryService {
     }
 
     public boolean authorize(String token) {
-         return entryRepository.findByToken(token) != null;
+         return entryRepository.findByUserToken(token) != null;
     }
 }

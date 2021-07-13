@@ -23,7 +23,7 @@ public class UserService {
     public UserDTO getUser(long id) {
         return userRepository
                     .findById(id)
-                    .map(u -> new UserDTO(u.getId(), u.getCaptain(), u.getUserName()))
+                    .map(u -> new UserDTO(u.getUserId(), u.isCaptain(), u.getUserName()))
                     .orElseThrow(RuntimeException::new);
     }
 
@@ -31,7 +31,7 @@ public class UserService {
         return userRepository
                     .findAllByRoom(roomId)
                     .stream()
-                    .map(u -> new UserDTO(u.getId(), u.getCaptain(), u.getUserName()))
+                    .map(u -> new UserDTO(u.getUserId(), u.isCaptain(), u.getUserName()))
                     .collect(Collectors.toList());
     }
 
