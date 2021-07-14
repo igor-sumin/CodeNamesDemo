@@ -20,20 +20,20 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public UserDTO getUser(long id) {
-        return userRepository
-                    .findById(id)
-                    .map(u -> new UserDTO(u.getUserId(), u.isCaptain(), u.getUserName()))
-                    .orElseThrow(RuntimeException::new);
-    }
-
-    public List<UserDTO> getAllUsersRoom(int roomId) {
-        return userRepository
-                    .findAllByRoom(roomId)
-                    .stream()
-                    .map(u -> new UserDTO(u.getUserId(), u.isCaptain(), u.getUserName()))
-                    .collect(Collectors.toList());
-    }
+//    public UserDTO getUser(long id) {
+//        return userRepository
+//                    .findById(id)
+//                    .map(u -> new UserDTO(u.getUserId(), u.isCaptain(), u.getUserName()))
+//                    .orElseThrow(RuntimeException::new);
+//    }
+//
+//    public List<UserDTO> getAllUsersRoom(int roomId) {
+//        return userRepository
+//                    .findAllByRoom(roomId)
+//                    .stream()
+//                    .map(u -> new UserDTO(u.getUserId(), u.isCaptain(), u.getUserName()))
+//                    .collect(Collectors.toList());
+//    }
 
     public List<User> findAll() {
         return userRepository.findAll();

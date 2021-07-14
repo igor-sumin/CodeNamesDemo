@@ -11,7 +11,6 @@ create table team (
       created_on timestamp not null
 );
 
-
 create table users (
 	users_id serial primary key,
 	user_login varchar(50) not null,
@@ -40,8 +39,7 @@ create table messages (
 );
 
 create table entry (
-    entry_id serial primary key,
-    user_id bigint not null,
+    user_id serial primary key,
     user_token varchar not null
 );
 

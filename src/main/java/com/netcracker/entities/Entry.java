@@ -13,17 +13,22 @@ import javax.persistence.*;
 @Table(name = "entry")
 public class Entry {
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy=GenerationType.SEQUENCE)
     @Column(name="entry_id")
     private Long id;
 
-    @Column(name = "user_id")
+    @Column(name="user_id")
     private Long userId;
 
     @Column(name = "user_token")
     private String userToken;
 
-    public Entry(Long userId, String userToken) {
+//    @OneToOne(fetch = FetchType.EAGER)
+//    @MapsId
+//    @JoinColumn(name="user_id")
+//    private User user;
+
+    public Entry(long userId, String userToken) {
         this.userId = userId;
         this.userToken = userToken;
     }

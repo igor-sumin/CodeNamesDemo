@@ -36,10 +36,7 @@ public class RegisterService {
             ).toString()
         ).getToken();
 
-        // сохраняем пользователя
         userRepository.save(user);
-
-        // сохраняем токен
         entryRepository.save(new Entry(user.getUserId(), userToken));
 
         return userToken;

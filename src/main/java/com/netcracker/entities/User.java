@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.List;
 
-// TODO: updatable ??
+// TODO: id += 2
 
 @Data
 @AllArgsConstructor
@@ -32,23 +32,6 @@ public class User {
 
     @Column(name="user_email")
     private String userEmail;
-
-    @Column(name="captain", insertable = false)
-    private boolean captain;
-
-    @Column(name="team", insertable = false, updatable = false)
-    private int team;
-
-    @Column(name="room", insertable = false, updatable = false)
-    private int room;
-
-    @ManyToOne(fetch=FetchType.EAGER)
-    @JoinColumn(name="team")
-    private Team teamUser;
-
-    @ManyToOne(fetch=FetchType.EAGER)
-    @JoinColumn(name="room")
-    private Room roomUser;
 
     @OneToMany(mappedBy="user")
     private List<Messages> messages;

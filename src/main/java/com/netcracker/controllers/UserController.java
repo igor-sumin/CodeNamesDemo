@@ -26,7 +26,8 @@ public class UserController {
 
     @GetMapping("")
     public Pair<UserDTO, Entry> getUser(@RequestParam long id) {
-        return Pair.pair(userService.getUser(id), entryRepository.findByUserId(id));
+        // return Pair.pair(userService.getUser(id), entryRepository.findByUserId(id));
+        return null;
     }
 
     @GetMapping("/list")
@@ -36,6 +37,7 @@ public class UserController {
 
     @GetMapping("/list/room")
     public List<UserDTO> getAllUsersRoom(@RequestParam int id) {
-        return userService.getAllUsersRoom(id);
+        // return userService.getAllUsersRoom(id);
+        return null;
     }
 }

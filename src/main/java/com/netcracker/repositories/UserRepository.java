@@ -2,12 +2,13 @@ package com.netcracker.repositories;
 
 import com.netcracker.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-    List<User> findAllByRoom(int roomId);
-    User findByUserLoginAndUserPassword(String userLogin, String userPassword);
+    User findUserByUserLoginAndUserPassword(String userLogin, String userPassword);
 }

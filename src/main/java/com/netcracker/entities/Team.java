@@ -23,7 +23,4 @@ public class Team {
 
     @Column(name="qnt_points")
     private int qntPoints;
-
-    @OneToMany(mappedBy="teamUser")
-    private List<User> users;
 }

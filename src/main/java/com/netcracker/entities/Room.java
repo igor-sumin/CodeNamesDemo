@@ -23,7 +23,4 @@ public class Room {
 
     @Column(name="amount")
     private int amount;
-
-    @OneToMany(mappedBy="roomUser")
-    private List<User> users;
 }
