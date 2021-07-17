@@ -9,21 +9,19 @@ import java.sql.Timestamp;
 
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
 @Table(name="messages")
 public class Messages {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     @Column(name="messages_id")
-    private Long id;
+    private Long messagesId;
+
+    @Column(name="user_id")
+    private Long userId;
 
     @Column(name="user_text")
     private String userText;
-
-    @Column(name="user_id", insertable = false, updatable = false)
-    private int userId;
 
     @Column(name="wired")
     private int wired;
@@ -31,7 +29,10 @@ public class Messages {
     @Column(name="created_on")
     private Timestamp createdOn;
 
-    @ManyToOne(fetch=FetchType.EAGER)
-    @JoinColumn(name="user_id")
+    @ManyToOne
+    @JoinColumn(name="user_id", nullable = false)
     private User user;
+
+    protected Messages() {
+    }
 }

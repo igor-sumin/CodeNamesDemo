@@ -7,8 +7,6 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
 @Table(name = "entry")
 public class Entry {
@@ -23,12 +21,14 @@ public class Entry {
     @Column(name = "user_token")
     private String userToken;
 
-//    @OneToOne(fetch = FetchType.EAGER)
-//    @MapsId
-//    @JoinColumn(name="user_id")
-//    private User user;
+    @OneToOne
+    @JoinColumn(name="user_id", nullable = false)
+    private User user;
 
-    public Entry(long userId, String userToken) {
+    protected Entry() {
+    }
+
+    public Entry(Long userId, String userToken) {
         this.userId = userId;
         this.userToken = userToken;
     }

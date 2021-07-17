@@ -8,17 +8,13 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.List;
 
-// TODO: id += 2
-
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
 @Table(name="users")
 public class User {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
-    @Column(name="users_id")
+    @Column(name="user_id")
     private long userId;
 
     @Column(name="user_login")
@@ -35,6 +31,15 @@ public class User {
 
     @OneToMany(mappedBy="user")
     private List<Messages> messages;
+
+    @OneToOne(mappedBy="user")
+    private Entry entry;
+
+    @OneToOne(mappedBy="user")
+    private UserTeam userTeam;
+
+    protected User() {
+    }
 
     public User(RegisterRequestDTO registerDTO) {
         this.userLogin = registerDTO.getLogin();

@@ -8,8 +8,6 @@ import javax.persistence.*;
 import java.util.List;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
 @Table(name="room")
 public class Room {
@@ -18,9 +16,12 @@ public class Room {
     @Column(name="room_id")
     private Long id;
 
-    @Column(name="uniq_ref")
-    private String uniqRef;
+    @Column(name="ref")
+    private String ref;
 
-    @Column(name="amount")
-    private int amount;
+    @OneToMany(mappedBy="room")
+    private List<Team> teams;
+
+    protected Room() {
+    }
 }
