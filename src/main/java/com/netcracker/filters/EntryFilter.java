@@ -1,5 +1,8 @@
 package com.netcracker.filters;
 
+import com.netcracker.dto.RequestContext;
+import com.netcracker.entities.User;
+import com.netcracker.entities.UserToken;
 import com.netcracker.services.entry.EntryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +20,7 @@ import java.util.List;
 @Component
 @Order(2)
 public class EntryFilter implements Filter {
+    public static final String REQUEST_CONTEXT = "REQUEST_CONTEXT";
     private final EntryService entryService;
     private static final List<String> url = Arrays.asList("/login", "/register");
 
@@ -43,8 +47,13 @@ public class EntryFilter implements Filter {
         }
 
         String token = httpRequest.getHeader("token");
-        if (entryService.authorize(token)) {
+        UserToken user = entryService.authorize(token);
+
+        httpRequest.setAttribute(REQUEST_CONTEXT, RequestContext.builder().userId(user.getUserId()).build());
+
+        if (user != null) {
             filterChain.doFilter(request, response);
+            return;
         }
 
         httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized error");

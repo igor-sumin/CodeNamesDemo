@@ -8,8 +8,8 @@ import java.sql.Timestamp;
 @Data
 @AllArgsConstructor
 public class MessagesDTO {
+    private Long userId;
     private String userText;
     private int wired;
     private Timestamp createdOn;
-    private int userId;
 }

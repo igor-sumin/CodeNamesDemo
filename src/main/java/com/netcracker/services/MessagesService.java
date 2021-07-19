@@ -1,6 +1,6 @@
 package com.netcracker.services;
 
-import com.netcracker.entities.Messages;
+import com.netcracker.entities.Message;
 import com.netcracker.dto.MessagesDTO;
 import com.netcracker.repositories.MessagesRepository;
 
@@ -19,12 +19,10 @@ public class MessagesService {
     }
 
     public MessagesDTO getMessages(long id) {
-        Messages messages = messagesRepository
+        Message messages = messagesRepository
                                 .findById(id)
                                 .orElseThrow(RuntimeException::new);
 
-        return new MessagesDTO(
-                   messages.getUserText(), messages.getWired(), messages.getCreatedOn(), messages.getUserId()
-        );
+        return null;
     }
 }

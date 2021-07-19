@@ -1,8 +1,6 @@
 package com.netcracker.entities;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -11,14 +9,11 @@ import java.sql.Timestamp;
 @Data
 @Entity
 @Table(name="messages")
-public class Messages {
+public class Message {
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy=GenerationType.SEQUENCE)
     @Column(name="messages_id")
     private Long messagesId;
-
-    @Column(name="user_id")
-    private Long userId;
 
     @Column(name="user_text")
     private String userText;
@@ -29,10 +24,14 @@ public class Messages {
     @Column(name="created_on")
     private Timestamp createdOn;
 
-    @ManyToOne
-    @JoinColumn(name="user_id", nullable = false)
+    @ManyToOne(targetEntity = User.class)
+    @JoinColumn(name="user_id")
     private User user;
 
-    protected Messages() {
+    @ManyToOne(targetEntity = Room.class)
+    @JoinColumn(name="room_id")
+    private Room room;
+
+    protected Message() {
     }
 }

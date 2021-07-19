@@ -1,5 +1,6 @@
 package com.netcracker.controllers.entry;
 
+import com.netcracker.controllers.CodeNamesExceptions;
 import com.netcracker.dto.entry.EntryResponseDTO;
 import com.netcracker.dto.entry.RegisterRequestDTO;
 import com.netcracker.services.entry.RegisterService;
@@ -20,6 +21,11 @@ public class RegisterController {
     @PostMapping("")
     public ResponseEntity<EntryResponseDTO> registerUser(@RequestBody RegisterRequestDTO registerDTO) {
         String token = registerService.register(registerDTO);
-        return ResponseEntity.ok(new EntryResponseDTO(token));
+
+        if (token == null || token.isEmpty()) {
+            throw new CodeNamesExceptions("user already exist.");
+        }
+
+        return ResponseEntity.ok(new EntryResponseDTO(token, "Created account."));
     }
 }

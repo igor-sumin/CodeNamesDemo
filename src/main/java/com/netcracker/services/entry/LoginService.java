@@ -2,6 +2,7 @@ package com.netcracker.services.entry;
 
 import com.netcracker.dto.entry.EntryResponseDTO;
 import com.netcracker.dto.entry.LoginRequestDTO;
+import com.netcracker.entities.UserToken;
 import com.netcracker.entities.User;
 import com.netcracker.repositories.EntryRepository;
 import com.netcracker.repositories.UserRepository;
@@ -44,7 +45,9 @@ public class LoginService {
         }
 
         // обновляем токен
-        entryRepository.setEntryByUserId(user.getUserId(), userToken);
+        UserToken userTokens = user.getUserTokens();
+        userTokens.setUserToken(userToken);
+        entryRepository.save(userTokens);
 
         return userToken;
     }

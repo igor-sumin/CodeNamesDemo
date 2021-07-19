@@ -8,6 +8,6 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 public class RoomDTO {
-    private Long id;
+    private String roomRef;
     private List<TeamDTO> teams;
 }

@@ -2,9 +2,18 @@ package com.netcracker.repositories;
 
 import com.netcracker.entities.Room;
 import org.springframework.data.jpa.repository.JpaRepository;
-
-import java.util.List;
+import org.springframework.data.jpa.repository.Query;
 
 public interface RoomRepository extends JpaRepository<Room, Long> {
-    List<Room> findByUniqRef(String uniqRef);
+    Room findByRoomRef(String ref);
+
+    @Query(
+        value = "select count(*) from rooms",
+        nativeQuery = true)
+    int countRooms();
+
+    @Query(
+        value = "select * from rooms limit 1 offset :room",
+        nativeQuery = true)
+    Room findRandRoom(int room);
 }

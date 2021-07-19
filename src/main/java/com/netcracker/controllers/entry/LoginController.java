@@ -1,14 +1,12 @@
 package com.netcracker.controllers.entry;
 
-import com.netcracker.controllers.ResponseExceptionHandler;
+import com.netcracker.controllers.CodeNamesExceptions;
 import com.netcracker.dto.entry.EntryResponseDTO;
 import com.netcracker.dto.entry.LoginRequestDTO;
 import com.netcracker.services.entry.LoginService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-// TODO: realize ResponseExceptionHandler
 
 @Slf4j
 @RestController
@@ -22,13 +20,13 @@ public class LoginController {
     }
 
     @PostMapping("")
-    public ResponseEntity<EntryResponseDTO> loginUser(@RequestBody LoginRequestDTO loginDTO) throws ResponseExceptionHandler {
+    public ResponseEntity<EntryResponseDTO> loginUser(@RequestBody LoginRequestDTO loginDTO) {
         String token = loginService.login(loginDTO);
 
-        if ( token.isEmpty()) {
-            throw new ResponseExceptionHandler();
+        if (token == null || token.isEmpty()) {
+            throw new CodeNamesExceptions("user not found.");
         }
 
-        return ResponseEntity.ok(new EntryResponseDTO(token));
+        return ResponseEntity.ok(new EntryResponseDTO(token, "Authorized."));
     }
 }

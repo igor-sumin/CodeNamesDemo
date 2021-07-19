@@ -5,8 +5,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class UserDTO {
+public class RoleTeamDTO {
     private boolean isCaptain;
-    private String userName;
     private String teamName;
 }

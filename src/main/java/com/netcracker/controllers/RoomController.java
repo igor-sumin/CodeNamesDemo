@@ -2,14 +2,14 @@ package com.netcracker.controllers;
 
 import com.netcracker.dto.RoomDTO;
 import com.netcracker.services.RoomService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @RestController
-@RequestMapping("room")
+@RequestMapping("/room")
 public class RoomController {
     private final RoomService roomService;
 
@@ -18,8 +18,30 @@ public class RoomController {
         this.roomService = roomService;
     }
 
-    @GetMapping("")
-    public RoomDTO getRoom(String uniqRef) {
-        return roomService.getRoom(uniqRef);
+    @PostMapping("")
+    public ResponseEntity<RoomDTO> createRoom() {
+        return ResponseEntity.ok(roomService.createRoom());
+    }
+
+    @GetMapping("/random")
+    public ResponseEntity<RoomDTO> getRandRoom() {
+        RoomDTO roomDTO = roomService.findRandRoom();
+
+        if (roomDTO == null) {
+            throw new CodeNamesExceptions("no rooms have been created");
+        }
+
+        return ResponseEntity.ok(roomDTO);
+    }
+
+    @GetMapping("/{ref}")
+    public ResponseEntity<RoomDTO> getUniqRoom(@PathVariable String ref) {
+        RoomDTO roomDTO = roomService.findUniqRoom(ref);
+
+        if (roomDTO == null) {
+            throw new CodeNamesExceptions("not found room");
+        }
+
+        return ResponseEntity.ok(roomDTO);
     }
 }

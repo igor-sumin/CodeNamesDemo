@@ -1,53 +1,49 @@
-create table room (
-	room_id serial primary key,
-	uniq_ref varchar unique not null,
-	amount integer not null
+create table rooms (
+                       room_id serial primary key,
+                       room_ref varchar unique not null,
+                       room_name varchar not null
 );
 
-create table team (
-      team_id serial primary key,
-      team_name varchar(50) not null,
-      qnt_points integer not null,
-      created_on timestamp not null
+create table teams (
+                       team_id serial primary key,
+                       room_id bigint not null,
+                       team_name varchar not null,
+                       qnt_points integer not null,
+                       foreign key (room_id) references rooms (room_id)
 );
 
 create table users (
-	users_id serial primary key,
-	user_login varchar(50) not null,
-	user_name varchar(50) not null,
-	user_password varchar(50) not null,
-    user_email varchar(50) not null,
-    captain boolean,
-	team integer,
-	room integer,
+                       user_id serial primary key,
+                       user_login varchar(50) not null,
+                       user_name varchar(50) not null,
+                       user_password varchar(50) not null,
+                       user_email varchar(50) not null
+);
 
-	foreign key (room)
-		references room (room_id),
-	foreign key (team)
-		references team (team_id)
+create table user_tokens (
+                         user_id serial primary key,
+                         user_token varchar not null,
+                         foreign key (user_id) references users (user_id)
 );
 
 create table messages (
-	messages_id serial primary key,
-	user_text varchar,
-	user_id integer not null,
-	wired integer not null,
-	created_on timestamp not null,
-	
-	foreign key (user_id)
-		references users (users_id)
+                          messages_id serial primary key,
+                          user_id bigint not null,
+                          room_id bigint not null,
+                          user_text varchar not null,
+                          wired integer,
+                          created_on timestamp not null,
+                          foreign key (user_id) references users (user_id),
+                          foreign key (room_id) references rooms (room_id)
 );
 
-create table entry (
-    user_id serial primary key,
-    user_token varchar not null
+create table user_team_rels (
+                           id serial primary key,
+                           user_id bigint not null,
+                           team_id bigint not null,
+                           is_captain boolean not null,
+                           foreign key (user_id) references users (user_id),
+                           foreign key (team_id) references teams (team_id)
 );
 
-insert into room(uniq_ref, amount)
-    values('localhost:8080/sass1', 10);
-
-insert into team(team_name, qnt_points, created_on)
-    values('Red', 0, '2021-06-29 10:17:48.223');
-
-insert into users(user_name, user_password, created_on, user_email)
-    values('Igor', 123, '2021-06-29 10:17:48.223', 'igor@mail.ru');
+drop table users, messages, rooms, teams, user_team_rels, user_tokens cascade ;

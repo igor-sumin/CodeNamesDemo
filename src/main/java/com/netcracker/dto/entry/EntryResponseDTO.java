@@ -7,4 +7,9 @@ import lombok.Data;
 @AllArgsConstructor
 public class EntryResponseDTO {
     private String token;
+    private String message;
+
+    public EntryResponseDTO(String token) {
+        this.token = token;
+    }
 }

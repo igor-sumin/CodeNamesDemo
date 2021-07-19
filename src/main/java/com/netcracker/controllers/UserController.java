@@ -1,43 +1,48 @@
 
 package com.netcracker.controllers;
 
+import com.netcracker.dto.RequestContext;
+import com.netcracker.dto.RoleTeamDTO;
 import com.netcracker.dto.UserDTO;
-import com.netcracker.entities.Entry;
 import com.netcracker.entities.User;
-import com.netcracker.repositories.EntryRepository;
 import com.netcracker.services.UserService;
-import jdk.internal.net.http.common.Pair;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static com.netcracker.filters.EntryFilter.REQUEST_CONTEXT;
+
+@Slf4j
 @RestController
 @RequestMapping("/user")
 public class UserController {
     private final UserService userService;
-    private final EntryRepository entryRepository;
 
     @Autowired
-    public UserController(UserService userService, EntryRepository entryRepository) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.entryRepository = entryRepository;
+    }
+
+    @PostMapping("")
+    public ResponseEntity<User> updateUser(@RequestAttribute(REQUEST_CONTEXT) RequestContext requestContext,
+                                           @RequestBody RoleTeamDTO roleTeamDTO) {
+        User users = userService.updateUser(requestContext, roleTeamDTO);
+        log.info("" + roleTeamDTO);
+
+        return ResponseEntity.ok(users);
     }
 
     @GetMapping("")
-    public Pair<UserDTO, Entry> getUser(@RequestParam long id) {
-        // return Pair.pair(userService.getUser(id), entryRepository.findByUserId(id));
+    public UserDTO getUser(@RequestAttribute(REQUEST_CONTEXT) RequestContext requestContext) {
+        //return userService.getUser(token);
         return null;
     }
 
     @GetMapping("/list")
     public List<User> getAllUsers() {
         return userService.findAll();
-    }
-
-    @GetMapping("/list/room")
-    public List<UserDTO> getAllUsersRoom(@RequestParam int id) {
-        // return userService.getAllUsersRoom(id);
-        return null;
     }
 }

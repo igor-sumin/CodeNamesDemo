@@ -2,7 +2,7 @@ package com.netcracker.services.entry;
 
 import com.netcracker.dto.entry.EntryResponseDTO;
 import com.netcracker.dto.entry.RegisterRequestDTO;
-import com.netcracker.entities.Entry;
+import com.netcracker.entities.UserToken;
 import com.netcracker.entities.User;
 import com.netcracker.repositories.EntryRepository;
 import com.netcracker.repositories.UserRepository;
@@ -28,7 +28,13 @@ public class RegisterService {
     }
 
     public String register(RegisterRequestDTO registerDTO) {
-        User user = new User(registerDTO);
+        User userDB = userRepository.findUserByUserLoginAndUserPassword(
+                registerDTO.getLogin(), registerDTO.getUserPassword()
+        );
+
+        if (userDB != null) {
+            return "";
+        }
 
         // генерируем токен
         String userToken = new EntryResponseDTO(UUID.nameUUIDFromBytes(
@@ -36,8 +42,9 @@ public class RegisterService {
             ).toString()
         ).getToken();
 
+        User user = new User(registerDTO);
         userRepository.save(user);
-        entryRepository.save(new Entry(user.getUserId(), userToken));
+        entryRepository.save(new UserToken(user, userToken));
 
         return userToken;
     }

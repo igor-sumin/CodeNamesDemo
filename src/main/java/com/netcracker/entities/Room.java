@@ -1,27 +1,38 @@
 package com.netcracker.entities;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
 @Entity
-@Table(name="room")
+@Table(name = "rooms")
 public class Room {
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
-    @Column(name="room_id")
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Column(name = "room_id")
+    private Long roomId;
 
-    @Column(name="ref")
-    private String ref;
+    @Column(name = "room_ref")
+    private String roomRef;
 
-    @OneToMany(mappedBy="room")
+    @Column(name = "room_name")
+    private String roomName;
+
+    @OneToMany(mappedBy = "room")
     private List<Team> teams;
 
+    @OneToMany(mappedBy = "room")
+    private List<Message> messages;
+
     protected Room() {
+    }
+
+    public Room(List<Team> teams, String roomRef, String roomName) {
+        this.teams = new ArrayList<>(teams);
+        this.roomRef = roomRef;
+        this.roomName = roomName;
     }
 }
