@@ -23,9 +23,24 @@ public class Team {
     @JoinColumn(name="room_id")
     private Room room;
 
-    @OneToOne(mappedBy="team")
+    @OneToOne(
+            fetch = FetchType.EAGER,
+            mappedBy="team")
     private UserTeamRels userTeamRels;
 
     protected Team() {
+    }
+
+    public Team(Room room, String teamName, int qntPoints) {
+        this.room = room;
+        this.teamName = teamName;
+        this.qntPoints = qntPoints;
+    }
+
+    public Team(UserTeamRels userTeamRels, Room room, String teamName, int qntPoints) {
+        this.userTeamRels = userTeamRels;
+        this.room = room;
+        this.teamName = teamName;
+        this.qntPoints = qntPoints;
     }
 }

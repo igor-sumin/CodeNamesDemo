@@ -46,4 +46,9 @@ create table user_team_rels (
                            foreign key (team_id) references teams (team_id)
 );
 
-drop table users, messages, rooms, teams, user_team_rels, user_tokens cascade ;
+-- drop table users, messages, rooms, teams, user_team_rels, user_tokens cascade;
+-- truncate table users, messages, rooms, teams, user_team_rels, user_tokens cascade;
+-- select * from users, user_tokens;
+-- select * from teams;
+-- select * from rooms;
+-- select * from user_team_rels;

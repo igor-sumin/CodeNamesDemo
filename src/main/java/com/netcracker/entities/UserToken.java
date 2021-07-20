@@ -16,7 +16,9 @@ public class UserToken {
     private String userToken;
 
     @MapsId
-    @OneToOne(targetEntity = User.class)
+    @OneToOne(
+            fetch = FetchType.EAGER,
+            targetEntity = User.class)
     @JoinColumn(name = "user_id")
     private User user;
 

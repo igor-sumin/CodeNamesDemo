@@ -16,14 +16,24 @@ public class UserTeamRels {
     @Column(name="is_captain")
     private boolean isCaptain;
 
-    @OneToOne(targetEntity = User.class)
+    @OneToOne(
+            fetch = FetchType.EAGER,
+            targetEntity = User.class)
     @JoinColumn(name="user_id")
     private User user;
 
-    @OneToOne(targetEntity = Team.class)
+    @OneToOne(
+            fetch = FetchType.EAGER,
+            targetEntity = Team.class)
     @JoinColumn(name="team_id")
     private Team team;
 
     protected UserTeamRels() {
+    }
+
+    public UserTeamRels(User user, Team team, boolean isCaptain) {
+        this.user = user;
+        this.team = team;
+        this.isCaptain = isCaptain;
     }
 }

@@ -8,5 +8,4 @@ import lombok.Data;
 public class UserDTO {
     private boolean isCaptain;
     private String userName;
-    private String teamName;
 }

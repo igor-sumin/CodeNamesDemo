@@ -27,14 +27,18 @@ public class User {
     @Column(name = "user_email")
     private String userEmail;
 
-    @OneToOne(mappedBy = "user")
+    @OneToOne(
+            fetch = FetchType.EAGER,
+            mappedBy = "user")
     @PrimaryKeyJoinColumn
     private UserToken userTokens;
 
     @OneToMany(mappedBy="user")
     private List<Message> messages;
 
-    @OneToOne(mappedBy="user")
+    @OneToOne(
+            fetch = FetchType.EAGER,
+            mappedBy="user")
     private UserTeamRels userTeamRels;
 
     protected User() {

@@ -9,4 +9,5 @@ import lombok.Setter;
 @Setter
 public class RequestContext {
     private Long userId;
+    private String roomRef;
 }

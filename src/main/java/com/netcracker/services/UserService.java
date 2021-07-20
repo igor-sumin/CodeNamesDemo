@@ -3,47 +3,65 @@ package com.netcracker.services;
 import com.netcracker.dto.RequestContext;
 import com.netcracker.dto.RoleTeamDTO;
 import com.netcracker.dto.UserDTO;
-import com.netcracker.entities.UserToken;
-import com.netcracker.entities.User;
-import com.netcracker.repositories.UserRepository;
-import com.netcracker.repositories.UserTokensRepository;
+import com.netcracker.entities.*;
+import com.netcracker.repositories.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service
 @Component
 public class UserService {
     private final UserRepository userRepository;
-    private final UserTokensRepository userTokensRepository;
+    private final UserTeamRelsRepository userTeamRelsRepository;
+    private final TeamRepository teamRepository;
+    private final RoomRepository roomRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository, UserTokensRepository userTokensRepository) {
+    public UserService(UserRepository userRepository,
+                       UserTeamRelsRepository userTeamRelsRepository,
+                       TeamRepository teamRepository,
+                       RoomRepository roomRepository
+    ) {
         this.userRepository = userRepository;
-        this.userTokensRepository = userTokensRepository;
+        this.userTeamRelsRepository = userTeamRelsRepository;
+        this.teamRepository = teamRepository;
+        this.roomRepository = roomRepository;
     }
 
-    public UserDTO getUser(String token) {
-        UserToken userTokens = userTokensRepository.findByUserToken(token);
-        User users = userTokens.getUser();
+    public UserDTO getUser(RequestContext requestContext) {
+        User user = userRepository.getOne(requestContext.getUserId());
 
         return new UserDTO(
-                users.getUserTeamRels().isCaptain(),
-                users.getUserName(),
-                users.getUserTeamRels().getTeam().getTeamName()
+            user.getUserTeamRels().isCaptain(),
+            user.getUserName()
         );
     }
 
-    public User updateUser(RequestContext requestContext, RoleTeamDTO roleTeamDTO) {
+    public UserDTO updateUser(RequestContext requestContext, RoleTeamDTO roleTeamDTO) {
         User user = userRepository.getOne(requestContext.getUserId());
+        Room room = roomRepository.findByRoomRef(roleTeamDTO.getRoomRef());
+        Team team = teamRepository.findByRoom(room);
 
-        user.getUserTeamRels().setCaptain(roleTeamDTO.isCaptain());
-        user.getUserTeamRels().getTeam().setTeamName(roleTeamDTO.getTeamName());
-        userRepository.save(user);
+        if (team == null) {
+            teamRepository.save(new Team(room, roleTeamDTO.getTeamName(), 0));
+        } else {
+            team.setTeamName(roleTeamDTO.getTeamName());
+            teamRepository.save(team);
+        }
 
-        return user;
+        roomRepository.save(room);
+        userTeamRelsRepository.save(new UserTeamRels(user, team, roleTeamDTO.isCaptain()));
+
+        return new UserDTO(
+            user.getUserTeamRels().isCaptain(),
+            user.getUserName()
+        );
     }
 
     public List<User> findAll() {

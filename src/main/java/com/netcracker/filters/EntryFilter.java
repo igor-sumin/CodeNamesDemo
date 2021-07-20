@@ -1,7 +1,6 @@
 package com.netcracker.filters;
 
 import com.netcracker.dto.RequestContext;
-import com.netcracker.entities.User;
 import com.netcracker.entities.UserToken;
 import com.netcracker.services.entry.EntryService;
 import lombok.extern.slf4j.Slf4j;
@@ -49,9 +48,8 @@ public class EntryFilter implements Filter {
         String token = httpRequest.getHeader("token");
         UserToken user = entryService.authorize(token);
 
-        httpRequest.setAttribute(REQUEST_CONTEXT, RequestContext.builder().userId(user.getUserId()).build());
-
         if (user != null) {
+            httpRequest.setAttribute(REQUEST_CONTEXT, RequestContext.builder().userId(user.getUserId()).build());
             filterChain.doFilter(request, response);
             return;
         }

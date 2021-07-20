@@ -27,18 +27,14 @@ public class UserController {
     }
 
     @PostMapping("")
-    public ResponseEntity<User> updateUser(@RequestAttribute(REQUEST_CONTEXT) RequestContext requestContext,
+    public ResponseEntity<UserDTO> updateUser(@RequestAttribute(REQUEST_CONTEXT) RequestContext requestContext,
                                            @RequestBody RoleTeamDTO roleTeamDTO) {
-        User users = userService.updateUser(requestContext, roleTeamDTO);
-        log.info("" + roleTeamDTO);
-
-        return ResponseEntity.ok(users);
+        return ResponseEntity.ok(userService.updateUser(requestContext, roleTeamDTO));
     }
 
     @GetMapping("")
     public UserDTO getUser(@RequestAttribute(REQUEST_CONTEXT) RequestContext requestContext) {
-        //return userService.getUser(token);
-        return null;
+        return userService.getUser(requestContext);
     }
 
     @GetMapping("/list")

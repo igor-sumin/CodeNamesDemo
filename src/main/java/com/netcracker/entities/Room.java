@@ -30,9 +30,25 @@ public class Room {
     protected Room() {
     }
 
+    public Room(String roomRef, String roomName) {
+        this.roomRef = roomRef;
+        this.roomName = roomName;
+    }
+
     public Room(List<Team> teams, String roomRef, String roomName) {
         this.teams = new ArrayList<>(teams);
         this.roomRef = roomRef;
         this.roomName = roomName;
+    }
+
+    @Override
+    public String toString() {
+        return "Room{" +
+                "roomId=" + roomId +
+                ", roomRef='" + roomRef + '\'' +
+                ", roomName='" + roomName + '\'' +
+                ", teams=" + teams +
+                ", messages=" + messages +
+                '}';
     }
 }

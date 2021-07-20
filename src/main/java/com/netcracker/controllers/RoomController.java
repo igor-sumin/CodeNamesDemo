@@ -34,9 +34,9 @@ public class RoomController {
         return ResponseEntity.ok(roomDTO);
     }
 
-    @GetMapping("/{ref}")
-    public ResponseEntity<RoomDTO> getUniqRoom(@PathVariable String ref) {
-        RoomDTO roomDTO = roomService.findUniqRoom(ref);
+    @GetMapping("")
+    public ResponseEntity<RoomDTO> getRoom(@RequestParam String ref) {
+        RoomDTO roomDTO = roomService.findRoom(ref);
 
         if (roomDTO == null) {
             throw new CodeNamesExceptions("not found room");
