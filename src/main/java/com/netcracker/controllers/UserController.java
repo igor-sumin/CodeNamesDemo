@@ -33,8 +33,8 @@ public class UserController {
     }
 
     @GetMapping("")
-    public UserDTO getUser(@RequestAttribute(REQUEST_CONTEXT) RequestContext requestContext) {
-        return userService.getUser(requestContext);
+    public UserDTO getUser(@RequestAttribute(REQUEST_CONTEXT) RequestContext requestContext, @RequestParam String ref) {
+        return userService.getUser(requestContext, ref);
     }
 
     @GetMapping("/list")

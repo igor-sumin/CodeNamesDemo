@@ -1,6 +1,5 @@
 package com.netcracker.services;
 
-import com.netcracker.dto.RequestContext;
 import com.netcracker.dto.RoomDTO;
 import com.netcracker.dto.TeamDTO;
 import com.netcracker.dto.UserDTO;
@@ -26,46 +25,34 @@ public class RoomService {
     private final RoomRepository roomRepository;
     private final UserTeamRelsRepository userTeamRelsRepository;
 
-    private RoomDTO getRoom(Room room) {
-        log.info("1)room = " + room.getRoomId());
-
-        List<TeamDTO> teamDTOList = new ArrayList<>();
+    private RoomDTO getInfoRoom(Room room) {
+        Set<String> teamName = new HashSet<>();
         List<Team> teams = room.getTeams();
         if (teams == null) {
             teams = new ArrayList<>();
         }
 
+        List<TeamDTO> teamDTOList = new ArrayList<>();
         for (Team team : teams) {
-             List<UserTeamRels> userTeamRelsList = userTeamRelsRepository.findAllByTeam(team);
+            if (teamName.contains(team.getTeamName())) continue;
+            teamName.add(team.getTeamName());
 
-            log.info("1.1)team = " + team.getTeamId());
-
+            List<UserTeamRels> userTeamRelsList = userTeamRelsRepository.findAllByTeam(team);
             List<UserDTO> userDTOList = new ArrayList<>();
+
             for (UserTeamRels userTeamRels : userTeamRelsList) {
                 User user = userTeamRels.getUser();
-
-                userDTOList.add(new UserDTO(
-                                user.getUserTeamRels().isCaptain(),
-                                user.getUserName()
-                        )
-                );
-
-                log.info("1.1.1)user = " + user.getUserId());
+                userDTOList.add(new UserDTO(userTeamRels.isCaptain(), user.getUserName()));
             }
 
-            teamDTOList.add(new TeamDTO(
-                            team.getTeamName(), userDTOList
-                    )
-            );
+            teamDTOList.add(new TeamDTO(team.getTeamName(), userDTOList));
         }
 
         return new RoomDTO(room.getRoomRef(), teamDTOList);
     }
 
     @Autowired
-    public RoomService(RoomRepository roomRepository,
-                       UserTeamRelsRepository userTeamRelsRepository
-    ) {
+    public RoomService(RoomRepository roomRepository, UserTeamRelsRepository userTeamRelsRepository) {
         this.roomRepository = roomRepository;
         this.userTeamRelsRepository = userTeamRelsRepository;
     }
@@ -75,7 +62,7 @@ public class RoomService {
         Room room = new Room(roomRef, "room_" + roomRef.substring(0, 3));
 
         roomRepository.save(room);
-        return this.getRoom(room);
+        return this.getInfoRoom(room);
     }
 
     public RoomDTO findRandRoom() {
@@ -86,7 +73,7 @@ public class RoomService {
             return null;
         }
 
-        return this.getRoom(
+        return this.getInfoRoom(
                 roomRepository.findRandRoom(
                         rand.nextInt(qntRooms)
                 )
@@ -99,6 +86,6 @@ public class RoomService {
             return null;
         }
 
-        return this.getRoom(room);
+        return this.getInfoRoom(room);
     }
 }

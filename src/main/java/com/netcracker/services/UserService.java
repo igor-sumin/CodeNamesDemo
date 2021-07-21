@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -34,32 +33,33 @@ public class UserService {
         this.roomRepository = roomRepository;
     }
 
-    public UserDTO getUser(RequestContext requestContext) {
+    public UserDTO getUser(RequestContext requestContext, String ref) {
         User user = userRepository.getOne(requestContext.getUserId());
+        Room room = roomRepository.findByRoomRef(ref);
+        Team team = teamRepository.findByRoom(room);
+        UserTeamRels userTeamRels = userTeamRelsRepository.findByUserAndTeam(user, team);
 
         return new UserDTO(
-            user.getUserTeamRels().isCaptain(),
-            user.getUserName()
+                userTeamRels.isCaptain(),
+                user.getUserName()
         );
     }
 
     public UserDTO updateUser(RequestContext requestContext, RoleTeamDTO roleTeamDTO) {
         User user = userRepository.getOne(requestContext.getUserId());
         Room room = roomRepository.findByRoomRef(roleTeamDTO.getRoomRef());
-        Team team = teamRepository.findByRoom(room);
+        Team team = teamRepository.findByTeamNameAndRoom(roleTeamDTO.getTeamName(), room);
 
         if (team == null) {
-            teamRepository.save(new Team(room, roleTeamDTO.getTeamName(), 0));
-        } else {
-            team.setTeamName(roleTeamDTO.getTeamName());
-            teamRepository.save(team);
+            team = new Team(room, roleTeamDTO.getTeamName(), 0);
         }
 
+        teamRepository.save(team);
         roomRepository.save(room);
         userTeamRelsRepository.save(new UserTeamRels(user, team, roleTeamDTO.isCaptain()));
 
         return new UserDTO(
-            user.getUserTeamRels().isCaptain(),
+            roleTeamDTO.isCaptain(),
             user.getUserName()
         );
     }
