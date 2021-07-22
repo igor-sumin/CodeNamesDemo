@@ -35,8 +35,8 @@ public class RoomController {
     }
 
     @GetMapping("")
-    public ResponseEntity<RoomDTO> getRoom(@RequestParam String ref) {
-        RoomDTO roomDTO = roomService.findRoom(ref);
+    public ResponseEntity<RoomDTO> getRoom(@RequestParam String r) {
+        RoomDTO roomDTO = roomService.findRoom(r);
 
         if (roomDTO == null) {
             throw new CodeNamesExceptions("not found room");
@@ -44,4 +44,10 @@ public class RoomController {
 
         return ResponseEntity.ok(roomDTO);
     }
+
+    @GetMapping("/qnt")
+    public ResponseEntity<Integer> getAmountUsersRoom() {
+        return ResponseEntity.ok(roomService.defAmountUsersRoom());
+    }
+
 }

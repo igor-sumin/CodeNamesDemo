@@ -48,7 +48,17 @@ create table user_team_rels (
 
 -- drop table users, messages, rooms, teams, user_team_rels, user_tokens cascade;
 -- truncate table users, messages, rooms, teams, user_team_rels, user_tokens cascade;
--- select * from users, user_tokens;
+
+-- select * from user_tokens;
+-- select * from users
 -- select * from teams;
 -- select * from rooms;
 -- select * from user_team_rels;
+
+-- delete from teams where team_id = 508
+
+-- {
+--     "roomRef": "99ECFACF",
+--     "isCaptain": false,
+--     "teamName": "Red"
+-- }

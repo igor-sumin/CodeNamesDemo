@@ -8,8 +8,6 @@ import com.netcracker.entities.Team;
 import com.netcracker.entities.User;
 import com.netcracker.entities.UserTeamRels;
 import com.netcracker.repositories.RoomRepository;
-import com.netcracker.repositories.TeamRepository;
-import com.netcracker.repositories.UserRepository;
 import com.netcracker.repositories.UserTeamRelsRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,10 +25,7 @@ public class RoomService {
 
     private RoomDTO getInfoRoom(Room room) {
         Set<String> teamName = new HashSet<>();
-        List<Team> teams = room.getTeams();
-        if (teams == null) {
-            teams = new ArrayList<>();
-        }
+        List<Team> teams = Optional.ofNullable(room.getTeams()).orElseGet(ArrayList::new);
 
         List<TeamDTO> teamDTOList = new ArrayList<>();
         for (Team team : teams) {
@@ -87,5 +82,9 @@ public class RoomService {
         }
 
         return this.getInfoRoom(room);
+    }
+
+    public Integer defAmountUsersRoom() {
+        return roomRepository.countRooms();
     }
 }
