@@ -3,8 +3,8 @@ package com.netcracker.controllers;
 
 import com.netcracker.dto.RequestContext;
 import com.netcracker.dto.RoleTeamDTO;
-import com.netcracker.dto.TeamDTO;
 import com.netcracker.dto.UserDTO;
+import com.netcracker.dto.UserInfoDTO;
 import com.netcracker.entities.User;
 import com.netcracker.services.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -29,12 +29,22 @@ public class UserController {
 
     @PostMapping("")
     public ResponseEntity<UserDTO> updateUser(@RequestAttribute(REQUEST_CONTEXT) RequestContext requestContext,
-                                           @RequestBody RoleTeamDTO roleTeamDTO) {
-        return ResponseEntity.ok(userService.updateUser(requestContext, roleTeamDTO));
+                                              @RequestBody RoleTeamDTO roleTeamDTO) {
+        UserDTO userDTO = userService.updateUser(requestContext, roleTeamDTO);
+        if (userDTO == null) {
+            throw new CodeNamesExceptions("There is already a captain in the room");
+        }
+
+        return ResponseEntity.ok(userDTO);
     }
 
     @GetMapping("")
-    public UserDTO getUser(@RequestAttribute(REQUEST_CONTEXT) RequestContext requestContext, @RequestParam String ref) {
+    public List<UserInfoDTO> getUserInfo(@RequestAttribute(REQUEST_CONTEXT) RequestContext requestContext) {
+        return userService.getUserInfo(requestContext);
+    }
+
+    @GetMapping("/{ref}")
+    public UserDTO getUser(@RequestAttribute(REQUEST_CONTEXT) RequestContext requestContext, @PathVariable String ref) {
         return userService.getUser(requestContext, ref);
     }
 

@@ -1,18 +1,18 @@
 server:
   address: localhost
-  port: 8080
+  port: 8085
 
 spring:
   datasource:
     name: ${POSTGRES_DB:codenames}
     username: ${POSTGRES_USER:postgres}
     password: ${POSTGRES_PASSWORD:3752Amour}
-    url:
-      - jdbc:postgresql://${server.address}/${spring.datasource.name}
+    url: jdbc:postgresql://${server.address}/${spring.datasource.name}
+    driver-class-name: org.postgresql.Driver
 
   jpa:
     show-sql: true
-    generate-ddl: true
+    generate-ddl: false
 
     properties:
       hibernate:

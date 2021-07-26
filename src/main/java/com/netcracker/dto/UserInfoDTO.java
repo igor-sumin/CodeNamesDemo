@@ -2,12 +2,11 @@ package com.netcracker.dto;
 
 import lombok.*;
 
-@Data
 @Builder
 @Getter
 @Setter
-@AllArgsConstructor
-public class UserDTO {
+public class UserInfoDTO {
+    private String roomRef;
+    private String teamName;
     private boolean isCaptain;
-    private String userName;
 }

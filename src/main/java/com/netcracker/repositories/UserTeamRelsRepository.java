@@ -12,10 +12,14 @@ import java.util.List;
 
 @Repository
 public interface UserTeamRelsRepository extends JpaRepository<UserTeamRels, Long> {
-    UserTeamRels findByTeam(Team team);
     List<UserTeamRels> findAllByTeam(Team team);
-    UserTeamRels findByUser(User user);
+    List<UserTeamRels> findAllByUser(User user);
     UserTeamRels findByUserAndTeam(User user, Team team);
+
+    @Query(
+            value = "select count(utr)>0 from user_team_rels utr where utr.team_id = :teamId and utr.is_captain = true",
+            nativeQuery = true)
+    Boolean existsByCaptain(Long teamId);
 
     @Query(
             value = "select distinct team_id from user_team_rels",

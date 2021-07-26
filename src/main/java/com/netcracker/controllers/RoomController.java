@@ -23,6 +23,7 @@ public class RoomController {
         return ResponseEntity.ok(roomService.createRoom());
     }
 
+    // TODO: доделать
     @GetMapping("/random")
     public ResponseEntity<RoomDTO> getRandRoom() {
         RoomDTO roomDTO = roomService.findRandRoom();
@@ -34,9 +35,9 @@ public class RoomController {
         return ResponseEntity.ok(roomDTO);
     }
 
-    @GetMapping("")
-    public ResponseEntity<RoomDTO> getRoom(@RequestParam String r) {
-        RoomDTO roomDTO = roomService.findRoom(r);
+    @GetMapping("/{ref}")
+    public ResponseEntity<RoomDTO> getRoom(@PathVariable String ref) {
+        RoomDTO roomDTO = roomService.findRoom(ref);
 
         if (roomDTO == null) {
             throw new CodeNamesExceptions("not found room");
@@ -49,5 +50,4 @@ public class RoomController {
     public ResponseEntity<Integer> getAmountUsersRoom() {
         return ResponseEntity.ok(roomService.defAmountUsersRoom());
     }
-
 }

@@ -39,14 +39,23 @@ public class EntryFilter implements Filter {
     ) throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
+        String uri = httpRequest.getRequestURI();
 
-        if (url.contains(httpRequest.getRequestURI())) {
+        if (url.contains(uri)) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        if (uri.contains("/ws")) {
             filterChain.doFilter(request, response);
             return;
         }
 
         String token = httpRequest.getHeader("token");
         UserToken user = entryService.authorize(token);
+
+//        log.info("uri = " + uri);
+//        log.info("token = " + user.getUserId());
 
         if (user != null) {
             httpRequest.setAttribute(REQUEST_CONTEXT, RequestContext.builder().userId(user.getUserId()).build());

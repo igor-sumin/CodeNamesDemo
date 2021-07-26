@@ -1,17 +1,22 @@
 package com.netcracker.entities;
 
+import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Date;
 
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name="messages")
 public class Message {
     @Id
-    @GeneratedValue(strategy=GenerationType.SEQUENCE)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name="messages_id")
     private Long messagesId;
 
@@ -22,7 +27,7 @@ public class Message {
     private int wired;
 
     @Column(name="created_on")
-    private Timestamp createdOn;
+    private Date createdOn;
 
     @ManyToOne(targetEntity = User.class)
     @JoinColumn(name="user_id")
@@ -33,5 +38,14 @@ public class Message {
     private Room room;
 
     protected Message() {
+    }
+
+    @Builder
+    public Message(User user, Room room, String userText, int wired, Date createdOn) {
+        this.user = user;
+        this.room = room;
+        this.userText = userText;
+        this.wired = wired;
+        this.createdOn = createdOn;
     }
 }

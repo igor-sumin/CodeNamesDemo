@@ -1,10 +1,7 @@
 package com.netcracker.services;
 
 import com.netcracker.controllers.CodeNamesExceptions;
-import com.netcracker.dto.RequestContext;
-import com.netcracker.dto.RoleTeamDTO;
-import com.netcracker.dto.TeamDTO;
-import com.netcracker.dto.UserDTO;
+import com.netcracker.dto.*;
 import com.netcracker.entities.*;
 import com.netcracker.repositories.*;
 import lombok.extern.slf4j.Slf4j;
@@ -12,8 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -43,7 +42,7 @@ public class UserService {
                             .stream()
                             .filter(t -> userTeamRelsRepository.findByUserAndTeam(user, t) != null)
                             .findAny()
-                            .orElseThrow(RuntimeException::new);
+                            .orElseThrow(() -> new CodeNamesExceptions("can't find any team in room (" + ref + ")"));
 
         UserTeamRels userTeamRels = userTeamRelsRepository.findByUserAndTeam(user, team);
 
@@ -53,6 +52,27 @@ public class UserService {
         );
     }
 
+    public List<UserInfoDTO> getUserInfo(RequestContext requestContext) {
+        User user = userRepository.getOne(requestContext.getUserId());
+        List<UserTeamRels> userTeamRelsList = userTeamRelsRepository.findAllByUser(user);
+
+        List<UserInfoDTO> userInfoDTOList = new ArrayList<>();
+        for (UserTeamRels userTeamRels : userTeamRelsList) {
+            Team team = userTeamRels.getTeam();
+            Room room = team.getRoom();
+
+            userInfoDTOList.add(
+                UserInfoDTO.builder()
+                    .roomRef(room.getRoomRef())
+                    .teamName(team.getTeamName())
+                    .isCaptain(userTeamRels.isCaptain())
+                .build()
+            );
+        }
+
+        return userInfoDTOList;
+    }
+
     public UserDTO updateUser(RequestContext requestContext, RoleTeamDTO roleTeamDTO) {
         User user = userRepository.getOne(requestContext.getUserId());
         Room room = roomRepository.findByRoomRef(roleTeamDTO.getRoomRef());
@@ -60,6 +80,10 @@ public class UserService {
         Team team = Optional.ofNullable(
                 teamRepository.findByTeamNameAndRoom(roleTeamDTO.getTeamName(), room)
         ).orElseGet(() -> new Team(room, roleTeamDTO.getTeamName(), 0));
+
+        if (roleTeamDTO.isCaptain() && userTeamRelsRepository.existsByCaptain(team.getTeamId())) {
+            return null;
+        }
 
         teamRepository.save(team);
         roomRepository.save(room);
