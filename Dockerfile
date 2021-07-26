@@ -1,4 +1,5 @@
 FROM openjdk:8-jdk-alpine
-ARG JAR_FILE=target/*.jar
-COPY ${JAR_FILE} /var/app/codenames-demo.jar
-ENTRYPOINT ["java", "-jar", "/codenames-demo.jar"]
+
+COPY target/codenames-backend.jar /var/app/codenames-demo.jar
+
+CMD ["/usr/bin/java", "-Xmx1G", "-jar", "/var/app/codenames-demo.jar"]

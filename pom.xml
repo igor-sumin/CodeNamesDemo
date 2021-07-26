@@ -89,9 +89,7 @@
     </properties>
 
     <build>
-        <finalName>
-            ${project.artifactId}
-        </finalName>
+        <finalName>codenames-backend</finalName>
 
         <plugins>
             <plugin>
