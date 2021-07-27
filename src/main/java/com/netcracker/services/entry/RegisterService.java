@@ -28,11 +28,11 @@ public class RegisterService {
     }
 
     public String register(RegisterRequestDTO registerDTO) {
-        User userDB = userRepository.findUserByUserLoginAndUserPassword(
-                registerDTO.getLogin(), registerDTO.getUserPassword()
-        );
+        if (userRepository.existsByUserName(registerDTO.getUserName())) {
+            return "";
+        }
 
-        if (userDB != null) {
+        if (userRepository.existsByUserLoginAndUserPassword(registerDTO.getLogin(), registerDTO.getUserPassword())) {
             return "";
         }
 

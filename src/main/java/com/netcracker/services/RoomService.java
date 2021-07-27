@@ -1,5 +1,6 @@
 package com.netcracker.services;
 
+import com.netcracker.dto.RequestContext;
 import com.netcracker.dto.RoomDTO;
 import com.netcracker.dto.TeamDTO;
 import com.netcracker.dto.UserDTO;
@@ -8,6 +9,7 @@ import com.netcracker.entities.Team;
 import com.netcracker.entities.User;
 import com.netcracker.entities.UserTeamRels;
 import com.netcracker.repositories.RoomRepository;
+import com.netcracker.repositories.UserRepository;
 import com.netcracker.repositories.UserTeamRelsRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,7 @@ import java.util.*;
 public class RoomService {
     private final RoomRepository roomRepository;
     private final UserTeamRelsRepository userTeamRelsRepository;
+    private final UserRepository userRepository;
 
     private RoomDTO getInfoRoom(Room room) {
         Set<String> teamName = new HashSet<>();
@@ -46,10 +49,35 @@ public class RoomService {
         return new RoomDTO(room.getRoomRef(), teamDTOList);
     }
 
+    private List<Room> getRoomsForUser(RequestContext requestContext) {
+        User user = userRepository.getOne(requestContext.getUserId());
+        List<Room> rooms = roomRepository.findAll();
+        List<Room> userRooms = new ArrayList<>();
+
+        for (Room room : rooms) {
+            boolean userInRoom = false;
+            for (Team team : room.getTeams()) {
+                if (userTeamRelsRepository.existsByUserAndTeam(user, team)) {
+                    userInRoom = true;
+                    break;
+                }
+            }
+
+            if (!userInRoom) {
+                userRooms.add(room);
+            }
+        }
+
+        return userRooms;
+    }
+
     @Autowired
-    public RoomService(RoomRepository roomRepository, UserTeamRelsRepository userTeamRelsRepository) {
+    public RoomService(RoomRepository roomRepository,
+                       UserTeamRelsRepository userTeamRelsRepository,
+                       UserRepository userRepository) {
         this.roomRepository = roomRepository;
         this.userTeamRelsRepository = userTeamRelsRepository;
+        this.userRepository = userRepository;
     }
 
     public RoomDTO createRoom() {
@@ -60,19 +88,16 @@ public class RoomService {
         return this.getInfoRoom(room);
     }
 
-    public RoomDTO findRandRoom() {
-        Random rand = new Random();
-
-        int qntRooms = roomRepository.countRooms();
-        if (qntRooms < 1) {
+    public RoomDTO findRandRoom(RequestContext requestContext) {
+        int amountRandRooms = this.defAmountRoomsForUser(requestContext);
+        if (amountRandRooms < 1) {
             return null;
         }
 
-        return this.getInfoRoom(
-                roomRepository.findRandRoom(
-                        rand.nextInt(qntRooms)
-                )
-        );
+        Random random = new Random();
+        Room randRoom = this.getRoomsForUser(requestContext).get(random.nextInt(amountRandRooms));
+
+        return this.getInfoRoom(randRoom);
     }
 
     public RoomDTO findRoom(String ref) {
@@ -84,7 +109,11 @@ public class RoomService {
         return this.getInfoRoom(room);
     }
 
-    public Integer defAmountUsersRoom() {
+    public Integer defAmountRooms() {
         return roomRepository.countRooms();
+    }
+
+    public Integer defAmountRoomsForUser(RequestContext requestContext) {
+        return this.getRoomsForUser(requestContext).size();
     }
 }

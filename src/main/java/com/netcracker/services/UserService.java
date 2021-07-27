@@ -80,12 +80,12 @@ public class UserService {
         Team team = Optional.ofNullable(
                 teamRepository.findByTeamNameAndRoom(roleTeamDTO.getTeamName(), room)
         ).orElseGet(() -> new Team(room, roleTeamDTO.getTeamName(), 0));
+        teamRepository.save(team);
 
         if (roleTeamDTO.isCaptain() && userTeamRelsRepository.existsByCaptain(team.getTeamId())) {
             return null;
         }
 
-        teamRepository.save(team);
         roomRepository.save(room);
         userTeamRelsRepository.save(new UserTeamRels(user, team, roleTeamDTO.isCaptain()));
 

@@ -31,6 +31,7 @@ public class UserController {
     public ResponseEntity<UserDTO> updateUser(@RequestAttribute(REQUEST_CONTEXT) RequestContext requestContext,
                                               @RequestBody RoleTeamDTO roleTeamDTO) {
         UserDTO userDTO = userService.updateUser(requestContext, roleTeamDTO);
+
         if (userDTO == null) {
             throw new CodeNamesExceptions("There is already a captain in the room");
         }

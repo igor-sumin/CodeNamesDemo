@@ -15,6 +15,7 @@ public interface UserTeamRelsRepository extends JpaRepository<UserTeamRels, Long
     List<UserTeamRels> findAllByTeam(Team team);
     List<UserTeamRels> findAllByUser(User user);
     UserTeamRels findByUserAndTeam(User user, Team team);
+    Boolean existsByUserAndTeam(User user, Team team);
 
     @Query(
             value = "select count(utr)>0 from user_team_rels utr where utr.team_id = :teamId and utr.is_captain = true",

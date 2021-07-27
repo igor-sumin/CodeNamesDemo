@@ -1,11 +1,14 @@
 package com.netcracker.controllers;
 
+import com.netcracker.dto.RequestContext;
 import com.netcracker.dto.RoomDTO;
 import com.netcracker.services.RoomService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import static com.netcracker.filters.EntryFilter.REQUEST_CONTEXT;
 
 @Slf4j
 @RestController
@@ -23,13 +26,12 @@ public class RoomController {
         return ResponseEntity.ok(roomService.createRoom());
     }
 
-    // TODO: доделать
     @GetMapping("/random")
-    public ResponseEntity<RoomDTO> getRandRoom() {
-        RoomDTO roomDTO = roomService.findRandRoom();
+    public ResponseEntity<RoomDTO> getRandRoom(@RequestAttribute(REQUEST_CONTEXT) RequestContext requestContext) {
+        RoomDTO roomDTO = roomService.findRandRoom(requestContext);
 
         if (roomDTO == null) {
-            throw new CodeNamesExceptions("no rooms have been created");
+            throw new CodeNamesExceptions("there are no suitable rooms");
         }
 
         return ResponseEntity.ok(roomDTO);
@@ -46,8 +48,13 @@ public class RoomController {
         return ResponseEntity.ok(roomDTO);
     }
 
-    @GetMapping("/qnt")
-    public ResponseEntity<Integer> getAmountUsersRoom() {
-        return ResponseEntity.ok(roomService.defAmountUsersRoom());
+    @GetMapping("/amount")
+    public ResponseEntity<Integer> getAmountRooms() {
+        return ResponseEntity.ok(roomService.defAmountRooms());
+    }
+
+    @GetMapping("/amount/user")
+    public ResponseEntity<Integer> getAmountRoomsForUser(@RequestAttribute(REQUEST_CONTEXT) RequestContext requestContext) {
+        return ResponseEntity.ok(roomService.defAmountRoomsForUser(requestContext));
     }
 }
