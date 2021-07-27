@@ -54,9 +54,6 @@ public class EntryFilter implements Filter {
         String token = httpRequest.getHeader("token");
         UserToken user = entryService.authorize(token);
 
-//        log.info("uri = " + uri);
-//        log.info("token = " + user.getUserId());
-
         if (user != null) {
             httpRequest.setAttribute(REQUEST_CONTEXT, RequestContext.builder().userId(user.getUserId()).build());
             filterChain.doFilter(request, response);

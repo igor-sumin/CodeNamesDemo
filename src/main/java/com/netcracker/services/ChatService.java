@@ -32,18 +32,15 @@ public class ChatService {
         this.roomRepository = roomRepository;
     }
 
-    public void saveMessage(MessageDTO messageDTO, List<String> accessor) {
-        User user = userTokensRepository.findByUserToken(accessor.get(0)).getUser();
-        Room room = roomRepository.findByRoomRef(messageDTO.getRoomRef());
+    public void saveMessage(MessageDTO messageDTO, String roomRef, String userToken) {
+        Message message = Message.builder()
+                .user(userTokensRepository.findByUserToken(userToken).getUser())
+                .room(roomRepository.findByRoomRef(roomRef))
+                .userText(messageDTO.getUserText())
+                .createdOn(messageDTO.getCreatedOn())
+                .build();
 
-        chatRepository.save(
-                Message.builder()
-                        .user(user)
-                        .room(room)
-                        .userText(messageDTO.getUserText())
-                        .createdOn(messageDTO.getCreatedOn())
-                        .build()
-        );
+        // chatRepository.save(message);
     }
 
     public List<MessageDTO> findChatMessages(String ref) {
@@ -54,7 +51,6 @@ public class ChatService {
         for (Message message : messages) {
             messageDTOList.add(
                     MessageDTO.builder()
-                            .roomRef(ref)
                             .userText(message.getUserText())
                             .createdOn(message.getCreatedOn())
                             .build()
