@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -95,7 +96,8 @@ public class RoomService {
         }
 
         Random random = new Random();
-        Room randRoom = this.getRoomsForUser(requestContext).get(random.nextInt(amountRandRooms));
+        Room randRoom = this.getRoomsForUser(requestContext)
+                                .get(random.nextInt(amountRandRooms));
 
         return this.getInfoRoom(randRoom);
     }
@@ -107,6 +109,27 @@ public class RoomService {
         }
 
         return this.getInfoRoom(room);
+    }
+
+    public List<RoomDTO> findAllRooms() {
+        List<Room> rooms = roomRepository.findAll();
+        return rooms.stream().map(this::getInfoRoom).collect(Collectors.toList());
+    }
+
+    public List<RoomDTO> findAllRoomsForUser(RequestContext requestContext) {
+        User user = userRepository.getOne(requestContext.getUserId());
+        List<Team> teams = userTeamRelsRepository
+                            .findAllByUser(user)
+                            .stream()
+                            .map(UserTeamRels::getTeam)
+                            .collect(Collectors.toList());
+
+        List<Room> rooms = teams
+                            .stream()
+                            .map(Team::getRoom)
+                            .collect(Collectors.toList());
+
+        return rooms.stream().map(this::getInfoRoom).collect(Collectors.toList());
     }
 
     public Integer defAmountRooms() {

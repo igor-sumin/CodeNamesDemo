@@ -1,21 +1,20 @@
 package com.netcracker.services.entry;
 
-import com.netcracker.entities.User;
 import com.netcracker.entities.UserToken;
-import com.netcracker.repositories.EntryRepository;
+import com.netcracker.repositories.UserTokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class EntryService {
-    private final EntryRepository entryRepository;
+    private final UserTokenRepository userTokenRepository;
 
     @Autowired
-    public EntryService(EntryRepository entryRepository) {
-        this.entryRepository = entryRepository;
+    public EntryService(UserTokenRepository userTokenRepository) {
+        this.userTokenRepository = userTokenRepository;
     }
 
     public UserToken authorize(String token) {
-        return entryRepository.findByUserToken(token);
+        return userTokenRepository.findByUserToken(token);
     }
 }

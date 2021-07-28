@@ -4,9 +4,9 @@ import com.netcracker.dto.entry.EntryResponseDTO;
 import com.netcracker.dto.entry.LoginRequestDTO;
 import com.netcracker.entities.UserToken;
 import com.netcracker.entities.User;
-import com.netcracker.repositories.EntryRepository;
 import com.netcracker.repositories.UserRepository;
 
+import com.netcracker.repositories.UserTokenRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -20,23 +20,21 @@ import java.util.UUID;
 @Component
 public class LoginService {
     private final UserRepository userRepository;
-    private final EntryRepository entryRepository;
+    private final UserTokenRepository userTokenRepository;
 
     @Autowired
-    public LoginService(UserRepository userRepository, EntryRepository entryRepository) {
+    public LoginService(UserRepository userRepository, UserTokenRepository userTokenRepository) {
         this.userRepository = userRepository;
-        this.entryRepository = entryRepository;
+        this.userTokenRepository = userTokenRepository;
     }
 
     public String login(LoginRequestDTO loginDTO) {
-        // генерируем токен
         String userToken = new EntryResponseDTO(UUID.nameUUIDFromBytes(
                 loginDTO.toString().getBytes(StandardCharsets.UTF_8)
             ).toString()
         ).getToken();
 
-        User user = userRepository
-                    .findUserByUserLoginAndUserPassword(
+        User user = userRepository.findUserByUserLoginAndUserPassword(
                             loginDTO.getUserLogin(), loginDTO.getUserPassword()
                     );
 
@@ -45,9 +43,9 @@ public class LoginService {
         }
 
         // обновляем токен
-        UserToken userTokens = user.getUserTokens();
+        UserToken userTokens = user.getUserToken();
         userTokens.setUserToken(userToken);
-        entryRepository.save(userTokens);
+        userTokenRepository.save(userTokens);
 
         return userToken;
     }

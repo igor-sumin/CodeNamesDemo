@@ -20,7 +20,7 @@ public class Team {
     @Column(name="qnt_points")
     private int qntPoints;
 
-    @ManyToOne(targetEntity = Room.class)
+    @ManyToOne(fetch = FetchType.EAGER, targetEntity = Room.class)
     @JoinColumn(name="room_id")
     private Room room;
 

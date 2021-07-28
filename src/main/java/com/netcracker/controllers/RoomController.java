@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 import static com.netcracker.filters.EntryFilter.REQUEST_CONTEXT;
 
 @Slf4j
@@ -46,6 +48,16 @@ public class RoomController {
         }
 
         return ResponseEntity.ok(roomDTO);
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<List<RoomDTO>> getAllRooms() {
+        return ResponseEntity.ok(roomService.findAllRooms());
+    }
+
+    @GetMapping("/list/user")
+    public ResponseEntity<List<RoomDTO>> getAllRoomsForUser(@RequestAttribute(REQUEST_CONTEXT) RequestContext requestContext) {
+        return ResponseEntity.ok(roomService.findAllRoomsForUser(requestContext));
     }
 
     @GetMapping("/amount")

@@ -29,7 +29,7 @@ public class User {
 
     @OneToOne(mappedBy = "user")
     @PrimaryKeyJoinColumn
-    private UserToken userTokens;
+    private UserToken userToken;
 
     @OneToMany(mappedBy="user")
     private List<Message> messages;

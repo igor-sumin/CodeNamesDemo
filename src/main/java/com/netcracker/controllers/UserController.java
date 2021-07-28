@@ -5,6 +5,7 @@ import com.netcracker.dto.RequestContext;
 import com.netcracker.dto.RoleTeamDTO;
 import com.netcracker.dto.UserDTO;
 import com.netcracker.dto.UserInfoDTO;
+import com.netcracker.dto.entry.EntryResponseDTO;
 import com.netcracker.entities.User;
 import com.netcracker.services.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -45,12 +46,18 @@ public class UserController {
     }
 
     @GetMapping("/{ref}")
-    public UserDTO getUser(@RequestAttribute(REQUEST_CONTEXT) RequestContext requestContext, @PathVariable String ref) {
-        return userService.getUser(requestContext, ref);
+    public UserDTO getUserInRoom(@RequestAttribute(REQUEST_CONTEXT) RequestContext requestContext, @PathVariable String ref) {
+        return userService.getUserInRoom(requestContext, ref);
     }
 
     @GetMapping("/list")
     public List<User> getAllUsers() {
         return userService.findAll();
+    }
+
+    @PatchMapping("/logout")
+    public ResponseEntity<EntryResponseDTO> logoutUser(@RequestAttribute(REQUEST_CONTEXT) RequestContext requestContext) {
+        userService.logoutUser(requestContext);
+        return ResponseEntity.ok(EntryResponseDTO.builder().message("Successful logout.").build());
     }
 }

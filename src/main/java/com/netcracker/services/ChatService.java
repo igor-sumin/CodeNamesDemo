@@ -1,14 +1,14 @@
 package com.netcracker.services;
 
-import com.netcracker.dto.MessageDTO;
+import com.netcracker.controllers.CodeNamesExceptions;
+import com.netcracker.dto.chat.MessageDTO;
 
-import com.netcracker.entities.Message;
-import com.netcracker.entities.Room;
-import com.netcracker.entities.User;
+import com.netcracker.dto.chat.MessageResponseDTO;
+import com.netcracker.entities.*;
 import com.netcracker.repositories.ChatRepository;
 import com.netcracker.repositories.RoomRepository;
-import com.netcracker.repositories.UserRepository;
-import com.netcracker.repositories.UserTokensRepository;
+import com.netcracker.repositories.UserTeamRelsRepository;
+import com.netcracker.repositories.UserTokenRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -22,41 +22,75 @@ import java.util.List;
 @Component
 public class ChatService {
     private final ChatRepository chatRepository;
-    private final UserTokensRepository userTokensRepository;
+    private final UserTokenRepository userTokenRepository;
+    private final UserTeamRelsRepository userTeamRelsRepository;
     private final RoomRepository roomRepository;
 
+    private MessageResponseDTO getMessageResponseDTO(MessageDTO messageDTO, UserTeamRels userTeamRels) {
+        return MessageResponseDTO.builder()
+                .info(messageDTO)
+                .userName(userTeamRels.getUser().getUserName())
+                .isCaptain(userTeamRels.isCaptain())
+                .teamName(userTeamRels.getTeam().getTeamName())
+                .build();
+    }
+
+    private UserTeamRels getUserTeamRels(User user, Room room) {
+        Team team = room.getTeams()
+                .stream()
+                .filter(t -> userTeamRelsRepository.findByUserAndTeam(user, t) != null)
+                .findAny()
+                .orElseThrow(() -> new CodeNamesExceptions("can't find any team in room (" + room.getRoomRef() + ")"));
+
+        return userTeamRelsRepository.findByUserAndTeam(user, team);
+    }
+
     @Autowired
-    public ChatService(ChatRepository chatRepository, UserTokensRepository userTokensRepository, RoomRepository roomRepository) {
-        this.userTokensRepository = userTokensRepository;
+    public ChatService(
+            ChatRepository chatRepository,
+            UserTokenRepository userTokenRepository,
+            UserTeamRelsRepository userTeamRelsRepository,
+            RoomRepository roomRepository
+    ) {
+        this.userTokenRepository = userTokenRepository;
         this.chatRepository = chatRepository;
+        this.userTeamRelsRepository = userTeamRelsRepository;
         this.roomRepository = roomRepository;
     }
 
-    public void saveMessage(MessageDTO messageDTO, String roomRef, String userToken) {
+    public MessageResponseDTO processMessage(MessageDTO messageDTO, String roomRef, String userToken) {
+        User user = userTokenRepository.findByUserToken(userToken).getUser();
+        Room room = roomRepository.findByRoomRef(roomRef);
+        UserTeamRels userTeamRels = this.getUserTeamRels(user, room);
+
         Message message = Message.builder()
-                .user(userTokensRepository.findByUserToken(userToken).getUser())
-                .room(roomRepository.findByRoomRef(roomRef))
-                .userText(messageDTO.getUserText())
-                .createdOn(messageDTO.getCreatedOn())
-                .build();
+                        .user(user)
+                        .room(room)
+                        .userText(messageDTO.getUserText())
+                        .createdOn(messageDTO.getCreatedOn())
+                        .build();
 
         // chatRepository.save(message);
+        return this.getMessageResponseDTO(messageDTO, userTeamRels);
     }
 
-    public List<MessageDTO> findChatMessages(String ref) {
+    public List<MessageResponseDTO> findChatMessages(String ref) {
         Room room = roomRepository.findByRoomRef(ref);
         List<Message> messages = chatRepository.findAllByRoom(room);
 
-        List<MessageDTO> messageDTOList = new ArrayList<>();
+        List<MessageResponseDTO> messageResponseDTOList = new ArrayList<>();
         for (Message message : messages) {
-            messageDTOList.add(
-                    MessageDTO.builder()
-                            .userText(message.getUserText())
-                            .createdOn(message.getCreatedOn())
-                            .build()
-            );
+            MessageDTO messageDTO = MessageDTO.builder()
+                                        .userText(message.getUserText())
+                                        .createdOn(message.getCreatedOn())
+                                        .build();
+
+            User user = message.getUser();
+            UserTeamRels userTeamRels = this.getUserTeamRels(user, room);
+
+            messageResponseDTOList.add(this.getMessageResponseDTO(messageDTO, userTeamRels));
         }
 
-        return messageDTOList;
+        return messageResponseDTOList;
     }
 }

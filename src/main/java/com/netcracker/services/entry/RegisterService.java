@@ -4,8 +4,8 @@ import com.netcracker.dto.entry.EntryResponseDTO;
 import com.netcracker.dto.entry.RegisterRequestDTO;
 import com.netcracker.entities.UserToken;
 import com.netcracker.entities.User;
-import com.netcracker.repositories.EntryRepository;
 import com.netcracker.repositories.UserRepository;
+import com.netcracker.repositories.UserTokenRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -18,13 +18,13 @@ import java.util.UUID;
 @Service
 @Component
 public class RegisterService {
-    private final EntryRepository entryRepository;
     private final UserRepository userRepository;
+    private final UserTokenRepository userTokenRepository;
 
     @Autowired
-    public RegisterService(EntryRepository entryRepository, UserRepository userRepository) {
-        this.entryRepository = entryRepository;
+    public RegisterService(UserRepository userRepository, UserTokenRepository userTokenRepository) {
         this.userRepository = userRepository;
+        this.userTokenRepository = userTokenRepository;
     }
 
     public String register(RegisterRequestDTO registerDTO) {
@@ -44,7 +44,7 @@ public class RegisterService {
 
         User user = new User(registerDTO);
         userRepository.save(user);
-        entryRepository.save(new UserToken(user, userToken));
+        userTokenRepository.save(new UserToken(user, userToken));
 
         return userToken;
     }

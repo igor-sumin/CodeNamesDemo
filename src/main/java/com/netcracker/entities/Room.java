@@ -21,7 +21,7 @@ public class Room {
     @Column(name = "room_name")
     private String roomName;
 
-    @OneToMany(mappedBy = "room")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "room")
     private List<Team> teams;
 
     @OneToMany(mappedBy = "room")

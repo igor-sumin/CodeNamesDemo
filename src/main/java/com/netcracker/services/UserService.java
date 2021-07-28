@@ -12,31 +12,37 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 @Component
 public class UserService {
     private final UserRepository userRepository;
+    private final UserTokenRepository userTokenRepository;
     private final RoomRepository roomRepository;
     private final TeamRepository teamRepository;
     private final UserTeamRelsRepository userTeamRelsRepository;
 
+    private User getUser(RequestContext requestContext) {
+        return userRepository.getOne(requestContext.getUserId());
+    }
+
     @Autowired
     public UserService(UserRepository userRepository,
+                       UserTokenRepository userTokenRepository,
                        RoomRepository roomRepository,
                        TeamRepository teamRepository,
                        UserTeamRelsRepository userTeamRelsRepository
     ) {
         this.userRepository = userRepository;
+        this.userTokenRepository = userTokenRepository;
         this.roomRepository = roomRepository;
         this.teamRepository = teamRepository;
         this.userTeamRelsRepository = userTeamRelsRepository;
     }
 
-    public UserDTO getUser(RequestContext requestContext, String ref) {
-        User user = userRepository.getOne(requestContext.getUserId());
+    public UserDTO getUserInRoom(RequestContext requestContext, String ref) {
+        User user = this.getUser(requestContext);
         Room room = roomRepository.findByRoomRef(ref);
         Team team = room.getTeams()
                             .stream()
@@ -53,7 +59,7 @@ public class UserService {
     }
 
     public List<UserInfoDTO> getUserInfo(RequestContext requestContext) {
-        User user = userRepository.getOne(requestContext.getUserId());
+        User user = this.getUser(requestContext);
         List<UserTeamRels> userTeamRelsList = userTeamRelsRepository.findAllByUser(user);
 
         List<UserInfoDTO> userInfoDTOList = new ArrayList<>();
@@ -74,7 +80,7 @@ public class UserService {
     }
 
     public UserDTO updateUser(RequestContext requestContext, RoleTeamDTO roleTeamDTO) {
-        User user = userRepository.getOne(requestContext.getUserId());
+        User user = this.getUser(requestContext);
         Room room = roomRepository.findByRoomRef(roleTeamDTO.getRoomRef());
 
         Team team = Optional.ofNullable(
@@ -93,6 +99,14 @@ public class UserService {
                 roleTeamDTO.isCaptain(),
                 user.getUserName()
         );
+    }
+
+    public void logoutUser(RequestContext requestContext) {
+        User user = this.getUser(requestContext);
+
+        UserToken userToken = user.getUserToken();
+        userToken.setUserToken("");
+        userTokenRepository.save(userToken);
     }
 
     public List<User> findAll() {

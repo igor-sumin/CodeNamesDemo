@@ -13,9 +13,4 @@ import java.util.List;
 public interface TeamRepository extends JpaRepository<Team, Long> {
     Team findByTeamNameAndRoom(String teamName, Room room);
     Team findByRoom(Room room);
-
-//    @Query(
-//            value = "select distinct t from teams t",
-//            nativeQuery = true)
-//    List<Team> findAllTeams();
 }

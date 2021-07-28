@@ -1,4 +1,4 @@
-package com.netcracker.dto;
+package com.netcracker.dto.chat;
 
 import lombok.*;
 
