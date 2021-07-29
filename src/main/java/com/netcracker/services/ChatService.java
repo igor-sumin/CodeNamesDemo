@@ -70,7 +70,7 @@ public class ChatService {
                         .createdOn(messageDTO.getCreatedOn())
                         .build();
 
-        // chatRepository.save(message);
+        chatRepository.save(message);
         return this.getMessageResponseDTO(messageDTO, userTeamRels);
     }
 
