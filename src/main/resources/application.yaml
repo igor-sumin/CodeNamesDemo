@@ -30,3 +30,6 @@ logging:
     root: INFO
     logging.com.netcracker: TRACE
     com.netcraker.PropertyServiceDetailsRepository: DEBUG
+
+codenames:
+  cors-allow-origin: ${CORS-ALLOW-ORIGIN:http://localhost:8080}
