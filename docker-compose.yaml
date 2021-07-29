@@ -22,6 +22,7 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=3752Amour
       - PG_DATA=/var/lib/postgresql/data
+      - CORS-ALLOW-ORIGIN=http://localhost
     restart: always
     depends_on:
       - db
@@ -29,6 +30,8 @@ services:
       - codenames-net
   db:
     image: postgres:11
+    ports:
+      - 5432:5432
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=3752Amour
