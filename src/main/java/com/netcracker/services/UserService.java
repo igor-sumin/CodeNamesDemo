@@ -27,6 +27,26 @@ public class UserService {
         return userRepository.getOne(requestContext.getUserId());
     }
 
+    private List<UserInfoDTO> getFullInfoUser(User user) {
+        List<UserTeamRels> userTeamRelsList = userTeamRelsRepository.findAllByUser(user);
+
+        List<UserInfoDTO> userInfoDTOList = new ArrayList<>();
+        for (UserTeamRels userTeamRels : userTeamRelsList) {
+            Team team = userTeamRels.getTeam();
+            Room room = team.getRoom();
+
+            userInfoDTOList.add(
+                    UserInfoDTO.builder()
+                            .roomRef(room.getRoomRef())
+                            .teamName(team.getTeamName())
+                            .isCaptain(userTeamRels.isCaptain())
+                            .build()
+            );
+        }
+
+        return userInfoDTOList;
+    }
+
     @Autowired
     public UserService(UserRepository userRepository,
                        UserTokenRepository userTokenRepository,
@@ -58,25 +78,14 @@ public class UserService {
         );
     }
 
+    public List<UserInfoDTO> getUserWithNameInRoom(String userName) {
+        User user = userRepository.findByUserName(userName);
+        return this.getFullInfoUser(user);
+    }
+
     public List<UserInfoDTO> getUserInfo(RequestContext requestContext) {
         User user = this.getUser(requestContext);
-        List<UserTeamRels> userTeamRelsList = userTeamRelsRepository.findAllByUser(user);
-
-        List<UserInfoDTO> userInfoDTOList = new ArrayList<>();
-        for (UserTeamRels userTeamRels : userTeamRelsList) {
-            Team team = userTeamRels.getTeam();
-            Room room = team.getRoom();
-
-            userInfoDTOList.add(
-                UserInfoDTO.builder()
-                    .roomRef(room.getRoomRef())
-                    .teamName(team.getTeamName())
-                    .isCaptain(userTeamRels.isCaptain())
-                .build()
-            );
-        }
-
-        return userInfoDTOList;
+        return this.getFullInfoUser(user);
     }
 
     public UserDTO updateUser(RequestContext requestContext, RoleTeamDTO roleTeamDTO) {

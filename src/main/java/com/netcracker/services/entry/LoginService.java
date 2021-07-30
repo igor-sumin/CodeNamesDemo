@@ -34,7 +34,7 @@ public class LoginService {
             ).toString()
         ).getToken();
 
-        User user = userRepository.findUserByUserLoginAndUserPassword(
+        User user = userRepository.findByUserLoginAndUserPassword(
                             loginDTO.getUserLogin(), loginDTO.getUserPassword()
                     );
 

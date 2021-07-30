@@ -19,8 +19,6 @@ public class CodeNamesCorsFilter implements Filter {
         this.corsAllowOrigin = corsAllowOrigin;
     }
 
-    
-
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
             throws IOException, ServletException {

@@ -40,14 +40,19 @@ public class UserController {
         return ResponseEntity.ok(userDTO);
     }
 
+    @GetMapping("/{ref}")
+    public UserDTO getUserInRoom(@RequestAttribute(REQUEST_CONTEXT) RequestContext requestContext, @PathVariable String ref) {
+        return userService.getUserInRoom(requestContext, ref);
+    }
+
     @GetMapping("")
     public List<UserInfoDTO> getUserInfo(@RequestAttribute(REQUEST_CONTEXT) RequestContext requestContext) {
         return userService.getUserInfo(requestContext);
     }
 
-    @GetMapping("/{ref}")
-    public UserDTO getUserInRoom(@RequestAttribute(REQUEST_CONTEXT) RequestContext requestContext, @PathVariable String ref) {
-        return userService.getUserInRoom(requestContext, ref);
+    @GetMapping("/username/{userName}")
+    public List<UserInfoDTO> getUserWithNameInRoom(@PathVariable String userName) {
+        return userService.getUserWithNameInRoom(userName);
     }
 
     @GetMapping("/list")

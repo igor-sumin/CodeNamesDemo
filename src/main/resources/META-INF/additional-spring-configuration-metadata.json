@@ -1,0 +1,9 @@
+{
+  "properties": [
+    {
+      "name": "codenames.cors-allow-origin",
+      "type": "java.lang.String",
+      "description": "Description for codenames.cors-allow-origin."
+    }
+  ]
+}

@@ -17,6 +17,7 @@ services:
     ports:
       - 8085:8085
     environment:
+      - CORS-ALLOW-ORIGIN=http://localhost:80
       - POSTGRES_DB=codenames
       - POSTGRES_HOST=db:5432
       - POSTGRES_USER=postgres
