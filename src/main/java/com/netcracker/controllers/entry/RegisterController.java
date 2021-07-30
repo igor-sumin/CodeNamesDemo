@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("register")
+@RequestMapping("/register")
 public class RegisterController {
     private final RegisterService registerService;
 
