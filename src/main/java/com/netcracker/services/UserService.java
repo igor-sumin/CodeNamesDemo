@@ -78,6 +78,16 @@ public class UserService {
         );
     }
 
+    // TODO: что с userteamrels, messages?
+    public void deleteUser(String userLogin) {
+        User user = Optional.ofNullable(userRepository.findByUserLogin(userLogin))
+                            .orElseThrow(() -> new CodeNamesExceptions("Not found user."));
+        UserToken userToken = user.getUserToken();
+
+        userTokenRepository.delete(userToken);
+        userRepository.delete(user);
+    }
+
     public List<UserInfoDTO> getUserWithNameInRoom(String userName) {
         User user = userRepository.findByUserName(userName);
         return this.getFullInfoUser(user);

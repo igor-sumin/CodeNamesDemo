@@ -23,9 +23,6 @@ public class Message {
     @Column(name="user_text")
     private String userText;
 
-    @Column(name="wired")
-    private int wired;
-
     @Column(name="created_on")
     private Date createdOn;
 
@@ -41,11 +38,10 @@ public class Message {
     }
 
     @Builder
-    public Message(User user, Room room, String userText, int wired, Date createdOn) {
+    public Message(User user, Room room, String userText, Date createdOn) {
         this.user = user;
         this.room = room;
         this.userText = userText;
-        this.wired = wired;
         this.createdOn = createdOn;
     }
 }

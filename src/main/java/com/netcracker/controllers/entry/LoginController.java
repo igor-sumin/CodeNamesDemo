@@ -22,11 +22,6 @@ public class LoginController {
     @PostMapping("")
     public ResponseEntity<EntryResponseDTO> loginUser(@RequestBody LoginRequestDTO loginDTO) {
         String token = loginService.login(loginDTO);
-
-        if (token == null || token.isEmpty()) {
-            throw new CodeNamesExceptions("user not found.");
-        }
-
         return ResponseEntity.ok(new EntryResponseDTO(token, "Authorized."));
     }
 }

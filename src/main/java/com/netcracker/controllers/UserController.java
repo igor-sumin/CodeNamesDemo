@@ -50,6 +50,12 @@ public class UserController {
         return userService.getUserInfo(requestContext);
     }
 
+    @DeleteMapping("")
+    public ResponseEntity<EntryResponseDTO> deleteUser(@RequestParam String userLogin) {
+        userService.deleteUser(userLogin);
+        return ResponseEntity.ok(EntryResponseDTO.builder().message("User deleted successfully.").build());
+    }
+
     @GetMapping("/username/{userName}")
     public List<UserInfoDTO> getUserWithNameInRoom(@PathVariable String userName) {
         return userService.getUserWithNameInRoom(userName);

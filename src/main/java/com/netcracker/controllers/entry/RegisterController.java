@@ -21,11 +21,6 @@ public class RegisterController {
     @PostMapping("")
     public ResponseEntity<EntryResponseDTO> registerUser(@RequestBody RegisterRequestDTO registerDTO) {
         String token = registerService.register(registerDTO);
-
-        if (token == null || token.isEmpty()) {
-            throw new CodeNamesExceptions("user already exist.");
-        }
-
         return ResponseEntity.ok(new EntryResponseDTO(token, "Created account."));
     }
 }

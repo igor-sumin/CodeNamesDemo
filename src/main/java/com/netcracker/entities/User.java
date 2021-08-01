@@ -40,10 +40,10 @@ public class User {
     protected User() {
     }
 
-    public User(RegisterRequestDTO registerDTO) {
+    public User(RegisterRequestDTO registerDTO, String cryptUserPassword) {
         this.userLogin = registerDTO.getLogin();
         this.userName = registerDTO.getUserName();
-        this.userPassword = registerDTO.getUserPassword();
         this.userEmail = registerDTO.getEmail();
+        this.userPassword = cryptUserPassword;
     }
 }

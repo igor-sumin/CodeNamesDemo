@@ -14,10 +14,10 @@ create table teams (
 
 create table users (
                        user_id serial primary key,
-                       user_login varchar(50) not null,
-                       user_name varchar(50) not null,
-                       user_password varchar(50) not null,
-                       user_email varchar(50) not null
+                       user_login varchar not null,
+                       user_name varchar not null,
+                       user_password varchar not null,
+                       user_email varchar not null
 );
 
 create table user_tokens (
@@ -31,7 +31,6 @@ create table messages (
                           user_id bigint not null,
                           room_id bigint not null,
                           user_text varchar not null,
-                          wired integer,
                           created_on timestamp not null,
                           foreign key (user_id) references users (user_id),
                           foreign key (room_id) references rooms (room_id)
