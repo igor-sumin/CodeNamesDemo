@@ -2,6 +2,7 @@ package com.netcracker.controllers;
 
 import com.netcracker.dto.RequestContext;
 import com.netcracker.dto.RoomDTO;
+import com.netcracker.dto.entry.EntryResponseDTO;
 import com.netcracker.services.RoomService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,24 +31,21 @@ public class RoomController {
 
     @GetMapping("/random")
     public ResponseEntity<RoomDTO> getRandRoom(@RequestAttribute(REQUEST_CONTEXT) RequestContext requestContext) {
-        RoomDTO roomDTO = roomService.findRandRoom(requestContext);
-
-        if (roomDTO == null) {
-            throw new CodeNamesExceptions("there are no suitable rooms");
-        }
-
-        return ResponseEntity.ok(roomDTO);
+        return ResponseEntity.ok(roomService.findRandRoom(requestContext));
     }
 
     @GetMapping("/{ref}")
     public ResponseEntity<RoomDTO> getRoom(@PathVariable String ref) {
-        RoomDTO roomDTO = roomService.findRoom(ref);
+        return ResponseEntity.ok(roomService.findRoom(ref));
+    }
 
-        if (roomDTO == null) {
-            throw new CodeNamesExceptions("not found room");
-        }
-
-        return ResponseEntity.ok(roomDTO);
+    @PatchMapping("/{ref}")
+    public ResponseEntity<EntryResponseDTO> assignRoomName(@PathVariable String ref, @RequestParam String name) {
+        roomService.overrideRoomName(ref, name);
+        return ResponseEntity.ok(EntryResponseDTO.builder()
+                                                 .message("The name of the room has been rewritten.")
+                                                 .build()
+        );
     }
 
     @GetMapping("/list")

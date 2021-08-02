@@ -1,5 +1,6 @@
 package com.netcracker.services;
 
+import com.netcracker.controllers.CodeNamesExceptions;
 import com.netcracker.dto.RequestContext;
 import com.netcracker.dto.RoomDTO;
 import com.netcracker.dto.TeamDTO;
@@ -47,7 +48,7 @@ public class RoomService {
             teamDTOList.add(new TeamDTO(team.getTeamName(), userDTOList));
         }
 
-        return new RoomDTO(room.getRoomRef(), teamDTOList);
+        return new RoomDTO(room.getRoomRef(), room.getRoomName(), teamDTOList);
     }
 
     private List<Room> getRoomsForUser(RequestContext requestContext) {
@@ -72,6 +73,11 @@ public class RoomService {
         return userRooms;
     }
 
+    private Room getRoom(String ref) {
+        return Optional.ofNullable(roomRepository.findByRoomRef(ref))
+                       .orElseThrow(() -> new CodeNamesExceptions("not found room"));
+    }
+
     @Autowired
     public RoomService(RoomRepository roomRepository,
                        UserTeamRelsRepository userTeamRelsRepository,
@@ -92,7 +98,7 @@ public class RoomService {
     public RoomDTO findRandRoom(RequestContext requestContext) {
         int amountRandRooms = this.defAmountRoomsForUser(requestContext);
         if (amountRandRooms < 1) {
-            return null;
+            throw new CodeNamesExceptions("there are no suitable rooms");
         }
 
         Random random = new Random();
@@ -103,12 +109,13 @@ public class RoomService {
     }
 
     public RoomDTO findRoom(String ref) {
-        Room room = roomRepository.findByRoomRef(ref);
-        if (room == null) {
-            return null;
-        }
+        return this.getInfoRoom(this.getRoom(ref));
+    }
 
-        return this.getInfoRoom(room);
+    public void overrideRoomName(String ref, String name) {
+        Room room = this.getRoom(ref);
+        room.setRoomName(name);
+        roomRepository.save(room);
     }
 
     public List<RoomDTO> findAllRooms() {

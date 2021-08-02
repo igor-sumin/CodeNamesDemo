@@ -29,8 +29,4 @@ public class UserToken {
         this.user = user;
         this.userToken = userToken;
     }
-
-    public UserToken(String userToken) {
-        this.userToken = userToken;
-    }
 }

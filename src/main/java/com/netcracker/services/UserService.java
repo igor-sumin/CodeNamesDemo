@@ -21,6 +21,7 @@ public class UserService {
     private final UserTokenRepository userTokenRepository;
     private final RoomRepository roomRepository;
     private final TeamRepository teamRepository;
+    private final ChatRepository chatRepository;
     private final UserTeamRelsRepository userTeamRelsRepository;
 
     private User getUser(RequestContext requestContext) {
@@ -52,23 +53,26 @@ public class UserService {
                        UserTokenRepository userTokenRepository,
                        RoomRepository roomRepository,
                        TeamRepository teamRepository,
+                       ChatRepository chatRepository,
                        UserTeamRelsRepository userTeamRelsRepository
     ) {
         this.userRepository = userRepository;
         this.userTokenRepository = userTokenRepository;
         this.roomRepository = roomRepository;
         this.teamRepository = teamRepository;
+        this.chatRepository = chatRepository;
         this.userTeamRelsRepository = userTeamRelsRepository;
     }
 
     public UserDTO getUserInRoom(RequestContext requestContext, String ref) {
         User user = this.getUser(requestContext);
         Room room = roomRepository.findByRoomRef(ref);
-        Team team = room.getTeams()
+        Team team = Optional.ofNullable(room.getTeams()
                             .stream()
                             .filter(t -> userTeamRelsRepository.findByUserAndTeam(user, t) != null)
                             .findAny()
-                            .orElseThrow(() -> new CodeNamesExceptions("can't find any team in room (" + ref + ")"));
+                            .orElseThrow(() -> new CodeNamesExceptions("can't find user team in room (" + ref + ")"))
+        ).orElseThrow(() -> new CodeNamesExceptions("not found room"));
 
         UserTeamRels userTeamRels = userTeamRelsRepository.findByUserAndTeam(user, team);
 
@@ -78,11 +82,17 @@ public class UserService {
         );
     }
 
-    // TODO: что с userteamrels, messages?
     public void deleteUser(String userLogin) {
         User user = Optional.ofNullable(userRepository.findByUserLogin(userLogin))
                             .orElseThrow(() -> new CodeNamesExceptions("Not found user."));
-        UserToken userToken = user.getUserToken();
+        UserToken userToken = Optional.ofNullable(user.getUserToken())
+                                .orElseGet(() -> new UserToken(user, "-"));
+
+        List<UserTeamRels> userTeamRelsList = userTeamRelsRepository.findAllByUser(user);
+        List<Message> messages = chatRepository.findAllByUser(user);
+
+        userTeamRelsRepository.deleteAll(userTeamRelsList);
+        chatRepository.deleteAll(messages);
 
         userTokenRepository.delete(userToken);
         userRepository.delete(user);

@@ -5,6 +5,7 @@ import com.netcracker.entities.Team;
 import com.netcracker.entities.User;
 import com.netcracker.entities.UserTeamRels;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -26,4 +27,10 @@ public interface UserTeamRelsRepository extends JpaRepository<UserTeamRels, Long
             value = "select distinct team_id from user_team_rels",
             nativeQuery = true)
     List<Long> findAllTeams();
+
+//    @Query(
+//            value = "delete from user_team_rels u where u.user_id = :userId",
+//            nativeQuery = true)
+//    @Modifying
+//    void deleteAllUserUserTeamRelsList(Long userId);
 }
