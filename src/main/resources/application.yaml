@@ -31,4 +31,4 @@ logging:
     com.netcraker.PropertyServiceDetailsRepository: DEBUG
 
 codenames:
-  cors-allow-origin: ${CORS-ALLOW-ORIGIN:http://localhost:8080}
+  cors-allow-origin: ${CORS_ALLOW_ORIGIN:http://localhost}
